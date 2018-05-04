@@ -108,7 +108,7 @@ class BasicLayout extends React.PureComponent {
       type: 'user/fetchCurrent',
     });
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     unenquireScreen(this.enquireHandler);
   }
   getPageTitle() {
@@ -234,9 +234,9 @@ class BasicLayout extends React.PureComponent {
             <GlobalFooter
               links={[
                 {
-                  key: 'Pro 首页',
-                  title: 'Pro 首页',
-                  href: 'http://pro.ant.design',
+                  key: 'Portal',
+                  title: 'Portal Page',
+                  href: 'http://geomodeling.njnu.edu.cn/',
                   blankTarget: true,
                 },
                 {
@@ -246,15 +246,15 @@ class BasicLayout extends React.PureComponent {
                   blankTarget: true,
                 },
                 {
-                  key: 'Ant Design',
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
+                  key: 'ModelContainer',
+                  title: 'ModelContainer',
+                  href: 'http://172.21.212.119:8060/index',
                   blankTarget: true,
                 },
               ]}
               copyright={
                 <Fragment>
-                  Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                  Copyright <Icon type="copyright" /> OpenGMS
                 </Fragment>
               }
             />

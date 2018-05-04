@@ -91,7 +91,7 @@ class TagSelect extends Component {
     return (
       <div className={cls} style={style}>
         <CheckableTag checked={checkedAll} key="tag-select-__all__" onChange={this.onSelectAll}>
-          全部
+          All
         </CheckableTag>
         {value &&
           React.Children.map(children, child => {

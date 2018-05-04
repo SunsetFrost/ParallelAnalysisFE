@@ -69,17 +69,14 @@ export default class GlobalHeader extends PureComponent {
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item disabled>
-          <Icon type="user" />个人中心
+          <Icon type="user" />Persional Center
         </Menu.Item>
         <Menu.Item disabled>
-          <Icon type="setting" />设置
-        </Menu.Item>
-        <Menu.Item key="triggerError">
-          <Icon type="close-circle" />触发报错
+          <Icon type="setting" />Setting
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="logout">
-          <Icon type="logout" />退出登录
+        <Menu.Item key="logout" disabled>
+          <Icon type="logout" />Log out
         </Menu.Item>
       </Menu>
     );
@@ -100,8 +97,8 @@ export default class GlobalHeader extends PureComponent {
         <div className={styles.right}>
           <HeaderSearch
             className={`${styles.action} ${styles.search}`}
-            placeholder="站内搜索"
-            dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
+            placeholder="Search"
+            dataSource={['Cluster', 'Data', 'Notebook']}
             onSearch={value => {
               console.log('input', value); // eslint-disable-line
             }}
@@ -109,7 +106,7 @@ export default class GlobalHeader extends PureComponent {
               console.log('enter', value); // eslint-disable-line
             }}
           />
-          <Tooltip title="使用文档">
+          <Tooltip title="User Guide">
             <a
               target="_blank"
               href="http://pro.ant.design/docs/getting-started"
@@ -119,7 +116,7 @@ export default class GlobalHeader extends PureComponent {
               <Icon type="question-circle-o" />
             </a>
           </Tooltip>
-          <NoticeIcon
+          {/* <NoticeIcon
             className={styles.action}
             count={currentUser.notifyCount}
             onItemClick={(item, tabProps) => {
@@ -148,7 +145,7 @@ export default class GlobalHeader extends PureComponent {
               emptyText="你已完成所有待办"
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
-          </NoticeIcon>
+          </NoticeIcon> */}
           {currentUser.name ? (
             <Dropdown overlay={menu}>
               <span className={`${styles.action} ${styles.account}`}>

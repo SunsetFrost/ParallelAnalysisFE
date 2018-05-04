@@ -77,3 +77,19 @@ export async function fakeRegister(params) {
 export async function queryNotices() {
   return request('/api/notices');
 }
+
+export async function queryServers() {
+  return request('/api/servers');
+}
+
+export async function queryInstance() {
+  return request('/api/instance');
+}
+
+export async function queryAgentLog() {
+  return request('/api/agentlog');
+}
+
+export async function queryNotebook() {
+  return request('/api/notebook');
+}

@@ -37,8 +37,8 @@ const { RangePicker } = DatePicker;
 const rankingListData = [];
 for (let i = 0; i < 7; i += 1) {
   rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
+    title: `Agent ${i} `,
+    total: 233,
   });
 }
 
@@ -151,16 +151,16 @@ export default class Analysis extends Component {
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
           <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-            今日
+            Today
           </a>
           <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-            本周
+            Week
           </a>
           <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
-            本月
+            Month
           </a>
           <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
-            全年
+            Year
           </a>
         </div>
         <RangePicker
@@ -246,79 +246,65 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="总销售额"
+              title="Server"
               action={
-                <Tooltip title="指标说明">
+                <Tooltip title="Instruct">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={() => <span dangerouslySetInnerHTML={{ __html: yuan(126560) }} />}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
+              total={'4 / 12'}
+              footer={<Field label="Server Amount" value={numeral(12).format('0,0')} />}
               contentHeight={46}
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                周同比<span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                日环比<span className={styles.trendText}>11%</span>
-              </Trend>
+              <MiniArea color="#fff566" data={visitData} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="访问量"
+              title="CPU"
               action={
-                <Tooltip title="指标说明">
+                <Tooltip title="Instruct">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={numeral(8846).format('0,0')}
-              footer={<Field label="日访问量" value={numeral(1234).format('0,0')} />}
+              total={'0GHz/12GHz'}
+              footer={<Field label="Cpu Amount" value={numeral(12).format('0,0')} />}
+              contentHeight={46}
+            >
+              <MiniArea color="#bae637" data={visitData} />
+            </ChartCard>
+          </Col>
+          <Col {...topColResponsiveProps}>
+            <ChartCard
+              bordered={false}
+              title="Mem"
+              action={
+                <Tooltip title="Instruct">
+                  <Icon type="info-circle-o" />
+                </Tooltip>
+              }
+              total={'0GB/15GB'}
+              footer={<Field label="Mem Amount" value={numeral(8).format('0,0')} />}
+              contentHeight={46}
+            >
+              <MiniArea color="#5cdbd3" data={visitData} />
+            </ChartCard>
+          </Col>
+          <Col {...topColResponsiveProps}>
+            <ChartCard
+              bordered={false}
+              title="Disk"
+              action={
+                <Tooltip title="Instruct">
+                  <Icon type="info-circle-o" />
+                </Tooltip>
+              }
+              total={'0GB/28.8GB'}
+              footer={<Field label="Disk Amount" value={numeral(28.8).format('0,0')} />}
               contentHeight={46}
             >
               <MiniArea color="#975FE4" data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="支付笔数"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(6560).format('0,0')}
-              footer={<Field label="转化率" value="60%" />}
-              contentHeight={46}
-            >
-              <MiniBar data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="运营活动效果"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total="78%"
-              footer={
-                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
             </ChartCard>
           </Col>
         </Row>
@@ -326,16 +312,16 @@ export default class Analysis extends Component {
         <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
           <div className={styles.salesCard}>
             <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane tab="销售额" key="sales">
+              <TabPane tab="Parallel Calculate Amount" key="sales">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      <Bar height={295} title="销售额趋势" data={salesData} />
+                      <Bar height={295} title="Parallel calculate" data={salesData} />
                     </div>
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
+                      <h4 className={styles.rankingTitle}>Model rank</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
                           <li key={item.title}>
@@ -349,7 +335,7 @@ export default class Analysis extends Component {
                   </Col>
                 </Row>
               </TabPane>
-              <TabPane tab="访问量" key="views">
+              {/* <TabPane tab="访问量" key="views">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
@@ -371,122 +357,9 @@ export default class Analysis extends Component {
                     </div>
                   </Col>
                 </Row>
-              </TabPane>
+              </TabPane> */}
             </Tabs>
           </div>
-        </Card>
-
-        <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              bordered={false}
-              title="线上热门搜索"
-              extra={iconGroup}
-              style={{ marginTop: 24 }}
-            >
-              <Row gutter={68}>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
-                  <NumberInfo
-                    subTitle={
-                      <span>
-                        搜索用户数
-                        <Tooltip title="指标文案">
-                          <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
-                        </Tooltip>
-                      </span>
-                    }
-                    gap={8}
-                    total={numeral(12321).format('0,0')}
-                    status="up"
-                    subTotal={17.1}
-                  />
-                  <MiniArea line height={45} data={visitData2} />
-                </Col>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
-                  <NumberInfo
-                    subTitle="人均搜索次数"
-                    total={2.7}
-                    status="down"
-                    subTotal={26.2}
-                    gap={8}
-                  />
-                  <MiniArea line height={45} data={visitData2} />
-                </Col>
-              </Row>
-              <Table
-                rowKey={record => record.index}
-                size="small"
-                columns={columns}
-                dataSource={searchData}
-                pagination={{
-                  style: { marginBottom: 0 },
-                  pageSize: 5,
-                }}
-              />
-            </Card>
-          </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              className={styles.salesCard}
-              bordered={false}
-              title="销售额类别占比"
-              bodyStyle={{ padding: 24 }}
-              extra={
-                <div className={styles.salesCardExtra}>
-                  {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">全部渠道</Radio.Button>
-                      <Radio.Button value="online">线上</Radio.Button>
-                      <Radio.Button value="offline">门店</Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-              }
-              style={{ marginTop: 24, minHeight: 509 }}
-            >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
-              <Pie
-                hasLegend
-                subTitle="销售额"
-                total={() => (
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: yuan(salesPieData.reduce((pre, now) => now.y + pre, 0)),
-                    }}
-                  />
-                )}
-                data={salesPieData}
-                valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
-          </Col>
-        </Row>
-
-        <Card
-          loading={loading}
-          className={styles.offlineCard}
-          bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
-          style={{ marginTop: 32 }}
-        >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{ y1: '客流量', y2: '支付笔数' }}
-                  />
-                </div>
-              </TabPane>
-            ))}
-          </Tabs>
         </Card>
       </Fragment>
     );

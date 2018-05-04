@@ -11,7 +11,7 @@ import { Bar } from 'ant-design-pro/lib/Charts';
 const salesData = [];
 for (let i = 0; i < 12; i += 1) {
   salesData.push({
-    x: `${i + 1}月`,
+    x: `${i + 1}`,
     y: Math.floor(Math.random() * 1000) + 200,
   });
 }

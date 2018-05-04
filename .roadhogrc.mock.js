@@ -5,6 +5,8 @@ import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
+import { getServers, getInstance, getAgentLog } from './mock/servers';
+import { getNotebook } from './mock/notebook';
 import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
@@ -22,7 +24,7 @@ const proxy = {
       },
     },
     $body: {
-      name: 'Serati Ma',
+      name: 'Bowen Zhang',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
       userid: '00000001',
       notifyCount: 12,
@@ -135,6 +137,10 @@ const proxy = {
       path: '/base/category/list',
     });
   },
+  'GET /api/servers': getServers,
+  'GET /api/instance': getInstance,
+  'GET /api/agentlog': getAgentLog,
+  'GET /api/notebook': getNotebook,
 };
 
-export default (noProxy ? {} : delay(proxy, 1000));
+export default (noProxy ? {} : delay(proxy, 500));

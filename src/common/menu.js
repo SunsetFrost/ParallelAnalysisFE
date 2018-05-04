@@ -2,9 +2,68 @@ import { isUrl } from '../utils/utils';
 
 const menuData = [
   {
+    name: 'Home',
+    icon: 'home',
+    path: 'home',
+  },
+  {
+    name: 'Cluster Server',
+    icon: 'laptop',
+    path: 'cluster',
+    children: [
+      {
+        name: 'Status',
+        path: 'detail',
+      },
+      {
+        name: 'Instance',
+        path: 'monitor',
+      },
+      {
+        name: 'Log',
+        path: 'manage',
+      },
+    ],
+  },
+  {
+    name: 'Data Center',
+    icon: 'hdd',
+    path: 'datacenter',
+    children: [
+      {
+        name: 'Service',
+        path: 'list',
+      },
+      {
+        name: 'Download',
+        path: 'detail',
+      },
+    ],
+  },
+  {
+    name: 'Notebook',
+    icon: 'profile',
+    path: 'notebook',
+    children: [
+      {
+        name: 'DataAnalysis',
+        path: 'dataanalysis',
+      },
+      {
+        name: 'DataProcess',
+        path: 'dataprocess',
+      },
+      {
+        name: 'CompareReport',
+        path: 'report',
+      },
+    ],
+  },
+  {
     name: 'dashboard',
     icon: 'dashboard',
     path: 'dashboard',
+    hideInMenu: true,
     children: [
       {
         name: '分析页',
@@ -26,6 +85,7 @@ const menuData = [
     name: '表单页',
     icon: 'form',
     path: 'form',
+    hideInMenu: true,
     children: [
       {
         name: '基础表单',
@@ -46,6 +106,7 @@ const menuData = [
     name: '列表页',
     icon: 'table',
     path: 'list',
+    hideInMenu: true,
     children: [
       {
         name: '查询表格',
@@ -83,6 +144,7 @@ const menuData = [
     name: '详情页',
     icon: 'profile',
     path: 'profile',
+    hideInMenu: true,
     children: [
       {
         name: '基础详情页',
@@ -99,6 +161,7 @@ const menuData = [
     name: '结果页',
     icon: 'check-circle-o',
     path: 'result',
+    hideInMenu: true,
     children: [
       {
         name: '成功',
@@ -114,6 +177,7 @@ const menuData = [
     name: '异常页',
     icon: 'warning',
     path: 'exception',
+    hideInMenu: true,
     children: [
       {
         name: '403',

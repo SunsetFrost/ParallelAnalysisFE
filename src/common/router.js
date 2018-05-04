@@ -72,6 +72,34 @@ export const getRouterData = app => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/home': {
+      //component: dynamicWrapper(app, [], () => import('../routes/Home')),
+      component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
+    },
+    '/cluster/detail': {
+      component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Detail')),
+    },
+    '/cluster/manage': {
+      component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Manage')),
+    },
+    '/cluster/monitor': {
+      component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Monitor')),
+    },
+    '/datacenter/detail': {
+      component: dynamicWrapper(app, [], () => import('../routes/DataCenter/Detail')),
+    },
+    '/datacenter/list': {
+      component: dynamicWrapper(app, [], () => import('../routes/DataCenter/List')),
+    },
+    '/notebook/dataanalysis': {
+      component: dynamicWrapper(app, ['notebook'], () => import('../routes/Notebook/DataAnalysis')),
+    },
+    '/notebook/dataprocess': {
+      component: dynamicWrapper(app, ['notebook'], () => import('../routes/Notebook/DataProcess')),
+    },
+    '/notebook/report': {
+      component: dynamicWrapper(app, ['notebook'], () => import('../routes/Notebook/Report')),
+    },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
