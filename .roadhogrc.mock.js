@@ -7,6 +7,7 @@ import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { getServers, getInstance, getAgentLog } from './mock/servers';
 import { getNotebook } from './mock/notebook';
+import { getData } from './mock/data';
 import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
@@ -141,6 +142,7 @@ const proxy = {
   'GET /api/instance': getInstance,
   'GET /api/agentlog': getAgentLog,
   'GET /api/notebook': getNotebook,
+  'GET /api/data': getData,
 };
 
 export default (noProxy ? {} : delay(proxy, 500));

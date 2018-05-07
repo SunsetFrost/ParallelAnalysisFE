@@ -40,7 +40,6 @@ export default class Details extends Component {
   render() {
     const { server, loading } = this.props;
     const list = server.list;
-    console.log(list);
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>

@@ -37,8 +37,8 @@ const { RangePicker } = DatePicker;
 const rankingListData = [];
 for (let i = 0; i < 7; i += 1) {
   rankingListData.push({
-    title: `Agent ${i} `,
-    total: 233,
+    title: `IBIS ${i} `,
+    total: i + 10,
   });
 }
 
@@ -256,7 +256,7 @@ export default class Analysis extends Component {
               footer={<Field label="Server Amount" value={numeral(12).format('0,0')} />}
               contentHeight={46}
             >
-              <MiniArea color="#fff566" data={visitData} />
+              <MiniArea color="#ffec3d" data={visitData} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>

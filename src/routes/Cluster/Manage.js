@@ -26,9 +26,7 @@ export default class Manage extends Component {
         return (
           <List.Item key={item.id}>
             <List.Item.Meta
-              avatar={
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              }
+              avatar={<Avatar style={{ backgroundColor: '#87d068' }}>U</Avatar>}
               title={
                 <span>
                   <a className={styles.username}>{item.name}</a>
@@ -55,17 +53,21 @@ export default class Manage extends Component {
 
     return (
       <div>
-        <Card
-          bodyStyle={{ padding: 0 }}
-          boreder={false}
-          className={styles.activeCard}
-          title="Agent Log"
-          loading={loading}
-        >
-          <List loading={loading} size="large">
-            <div className={styles.activitiesList}>{this.renderList()}</div>
-          </List>
-        </Card>
+        <Row gutter={24}>
+          <Col>
+            <Card
+              bodyStyle={{ padding: 0 }}
+              boreder={false}
+              className={styles.activeCard}
+              title="Agent Log"
+              loading={loading}
+            >
+              <List loading={loading} size="large">
+                <div className={styles.activitiesList}>{this.renderList()}</div>
+              </List>
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   }

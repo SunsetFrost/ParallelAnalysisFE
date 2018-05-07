@@ -1,133 +1,118 @@
 import React, { Component } from 'react';
-import { Table, Input, Icon, Button, Popconfirm, Card } from 'antd';
+import moment from 'moment';
+import { connect } from 'dva';
+import {
+  List,
+  Card,
+  Row,
+  Col,
+  Radio,
+  Input,
+  Progress,
+  Button,
+  Icon,
+  Dropdown,
+  Menu,
+  Avatar,
+  Badge,
+} from 'antd';
 
-class EditableCell extends React.Component {
-  state = {
-    value: this.props.value,
-    editable: false,
-  };
-  handleChange = e => {
-    const value = e.target.value;
-    this.setState({ value });
-  };
-  check = () => {
-    this.setState({ editable: false });
-    if (this.props.onChange) {
-      this.props.onChange(this.state.value);
-    }
-  };
-  edit = () => {
-    this.setState({ editable: true });
-  };
-  render() {
-    const { value, editable } = this.state;
-    return (
-      <Card style={{ backgroundColor: '#FFFFFF' }}>
-        <div className="editable-cell">
-          {editable ? (
-            <div className="editable-cell-input-wrapper">
-              <Input value={value} onChange={this.handleChange} onPressEnter={this.check} />
-              <Icon type="check" className="editable-cell-icon-check" onClick={this.check} />
-            </div>
-          ) : (
-            <div className="editable-cell-text-wrapper">
-              {value || ' '}
-              <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-            </div>
-          )}
-        </div>
-      </Card>
-    );
-  }
-}
+import styles from '../List/BasicList.less';
 
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+const { Search } = Input;
+
+@connect(({ data, loading }) => ({
+  data,
+  loading: loading.effects['data/fetchData'],
+}))
 export default class Details extends Component {
-  constructor(props) {
-    super(props);
-    this.columns = [
-      {
-        title: 'name',
-        dataIndex: 'name',
-        width: '30%',
-        render: (text, record) => (
-          <EditableCell value={text} onChange={this.onCellChange(record.key, 'name')} />
-        ),
-      },
-      {
-        title: 'age',
-        dataIndex: 'age',
-      },
-      {
-        title: 'address',
-        dataIndex: 'address',
-      },
-      {
-        title: 'operation',
-        dataIndex: 'operation',
-        render: (text, record) => {
-          return this.state.dataSource.length > 1 ? (
-            <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.key)}>
-              <a href="javascript:;">Delete</a>
-            </Popconfirm>
-          ) : null;
-        },
-      },
-    ];
-
-    this.state = {
-      dataSource: [
-        {
-          key: '0',
-          name: 'Edward King 0',
-          age: '32',
-          address: 'London, Park Lane no. 0',
-        },
-        {
-          key: '1',
-          name: 'Edward King 1',
-          age: '32',
-          address: 'London, Park Lane no. 1',
-        },
-      ],
-      count: 2,
-    };
-  }
-  onCellChange = (key, dataIndex) => {
-    return value => {
-      const dataSource = [...this.state.dataSource];
-      const target = dataSource.find(item => item.key === key);
-      if (target) {
-        target[dataIndex] = value;
-        this.setState({ dataSource });
-      }
-    };
-  };
-  onDelete = key => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  };
-  handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`,
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'data/fetchData',
     });
-  };
+  }
+
   render() {
-    const { dataSource } = this.state;
-    const columns = this.columns;
+    const { data: { list }, loading } = this.props;
+
+    const Info = ({ title, value, bordered }) => (
+      <div className={styles.headerInfo}>
+        <span>{title}</span>
+        <p>{value}</p>
+        {bordered && <em />}
+      </div>
+    );
+
+    const extraContent = (
+      <div className={styles.extraContent}>
+        <Search
+          className={styles.extraContentSearch}
+          placeholder="Data name or resolution"
+          onSearch={() => ({})}
+        />
+      </div>
+    );
+
+    const ListContent = ({ data: { temporal, spatial, beginDate, endDate } }) => (
+      <div className={styles.listContent}>
+        <div className={styles.listContentItem}>
+          <span>Temporal</span>
+          <p>{temporal}</p>
+        </div>
+        <div className={styles.listContentItem}>
+          <span>Spatial</span>
+          <p>{spatial}</p>
+        </div>
+        <div className={styles.listContentItem}>
+          <span>Begin Date</span>
+          <p>{moment(beginDate).format('YYYY-MM-DD')}</p>
+        </div>
+        {/* <div className={styles.listContentItem}>
+          <span>End Date</span>
+          <p>{moment(endDate).format('YYYY-MM-DD')}</p>
+        </div> */}
+        <div className={styles.listContentItem}>
+          <Button type="primary">Download</Button>
+        </div>
+      </div>
+    );
+
     return (
-      <div>
-        <Button className="editable-add-btn" onClick={this.handleAdd}>
-          Add
-        </Button>
-        <Table bordered dataSource={dataSource} columns={columns} />
+      <div className={styles.standardList}>
+        <Card
+          className={styles.listCard}
+          bordered={false}
+          title="Data"
+          style={{ marginTop: 24 }}
+          bodyStyle={{ padding: '0 32px 40px 32px' }}
+          extra={extraContent}
+        >
+          <List
+            size="large"
+            rowKey="id"
+            loading={loading}
+            dataSource={list}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png'}
+                      shape="square"
+                      size="large"
+                    />
+                  }
+                  title={<a href="">{item.name}</a>}
+                  description={item.desc}
+                />
+                <ListContent data={item} />
+              </List.Item>
+            )}
+          />
+        </Card>
       </div>
     );
   }

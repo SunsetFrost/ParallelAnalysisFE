@@ -93,3 +93,7 @@ export async function queryAgentLog() {
 export async function queryNotebook() {
   return request('/api/notebook');
 }
+
+export async function queryData() {
+  return request('/api/data');
+}

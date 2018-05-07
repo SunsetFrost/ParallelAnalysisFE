@@ -72,7 +72,11 @@ export default class DataAnalysis extends Component {
               }
             >
               <Card.Meta
-                title={<a href="#">{item.name}</a>}
+                title={
+                  <a href={item.href} target="view_notebook">
+                    {item.name}
+                  </a>
+                }
                 description={<Ellipsis lines={2}>{item.desc}</Ellipsis>}
               />
               <div className={stylesProject.cardItemContent}>
