@@ -22,17 +22,21 @@ import StandardFormRow from 'components/StandardFormRow';
 
 import styles from '../List/Applications.less';
 import { stat } from 'fs';
+import { reverse } from 'lodash';
 
 const { Option } = Select;
 const FormItem = Form.Item;
+const pageSize = 12;
 
 @Form.create()
-@connect(({ server, loading }) => ({
-  server,
-  loading: loading.effects['server/fetchInstance'],
+@connect(({ mesos, loading }) => ({
+  mesos,
+  loading: loading.effects['mesos/fetchFrameworksByPage'],
 }))
 export default class Monitor extends Component {
-  state = { visibleModalDetail: false };
+  state = {
+    visibleModalDetail: false,
+  };
 
   showDetailModal = () => {
     this.setState({
@@ -49,13 +53,30 @@ export default class Monitor extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'server/fetchInstance',
+      type: 'mesos/fetchFrameworksByPage',
+      payload: {
+        currentPage: 1,
+        pageSize: pageSize,
+      },
     });
   }
 
+  handlePageChange = (page, pageSize) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'mesos/fetchFrameworksByPage',
+      payload: {
+        currentPage: page,
+        pageSize: pageSize,
+      },
+    });
+  };
+
   render() {
-    const { form, server, loading } = this.props;
-    const instance = server.instance;
+    const { form, mesos, loading } = this.props;
+    const { list, pagination } = mesos.frameworks;
+
     const { getFieldDecorator } = form;
 
     const formItemLayout = {
@@ -63,6 +84,12 @@ export default class Monitor extends Component {
         xs: { span: 24 },
         sm: { span: 16 },
       },
+    };
+
+    const paginationProps = {
+      pageSize: pageSize,
+      total: pagination.total,
+      onChange: this.handlePageChange,
     };
 
     const CardInfo = ({ activeUser, newUser }) => (
@@ -133,7 +160,8 @@ export default class Monitor extends Component {
           style={{ marginTop: 24 }}
           grid={{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
           loading={loading}
-          dataSource={instance}
+          pagination={paginationProps}
+          dataSource={list}
           renderItem={item => (
             <List.Item key={item.id}>
               <Card
@@ -166,14 +194,14 @@ export default class Monitor extends Component {
                       W
                     </Avatar>
                   }
-                  title={item.group}
+                  title={item.name}
                 />
                 <div className={styles.cardItemContent}>
-                  <CardInfo activeUser={item.cpu + 'GHz'} newUser={item.agent} />
+                  <CardInfo activeUser={item.used_resources.cpus + 'GHz'} newUser="2" />
                 </div>
                 <div>
                   <Progress
-                    percent={Number(item.status)}
+                    percent={Number('100')}
                     status="active"
                     strokeWidth={6}
                     style={{ width: 200 }}

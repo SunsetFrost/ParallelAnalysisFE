@@ -24,22 +24,27 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
 
-@connect(({ server, loading }) => ({
-  server,
+@connect(({ mesos, loading }) => ({
+  mesos,
   //loading: loading.effects['servers/fetchServers'],
-  loading: loading.effects['server/fetchServer'],
+  loading: loading.effects['mesos/fetchAgents'],
 }))
 export default class Details extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'server/fetchServer',
+      type: 'mesos/fetchMaster',
+    });
+    dispatch({
+      type: 'mesos/fetchAgents',
     });
   }
 
   render() {
-    const { server, loading } = this.props;
-    const list = server.list;
+    const { mesos, loading } = this.props;
+    // const list = [];
+    // console.log(mesos);
+    const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>
@@ -53,8 +58,9 @@ export default class Details extends Component {
       <div className={styles.extraContent}>
         <RadioGroup defaultValue="all">
           <RadioButton value="all">All</RadioButton>
-          <RadioButton value="progress">Running</RadioButton>
-          <RadioButton value="waiting">Waiting</RadioButton>
+          <RadioButton value="election">Election</RadioButton>
+          <RadioButton value="master">Master</RadioButton>
+          <RadioButton value="agent">Agent</RadioButton>
         </RadioGroup>
         <Search
           className={styles.extraContentSearch}
@@ -64,24 +70,24 @@ export default class Details extends Component {
       </div>
     );
 
-    const ListContent = ({ data: { group, ip, startTime, status } }) => (
+    const ListContent = ({ data: { agent_info: { hostname }, registered_time, active } }) => (
       <div className={styles.listContent}>
         <div className={styles.listContentItem}>
           <span>Group</span>
-          <p>{group}</p>
+          <p>IBIS</p>
         </div>
         <div className={styles.listContentItem}>
           <span>IP</span>
-          <p>{ip}</p>
+          <p>{hostname}</p>
         </div>
         <div className={styles.listContentItem}>
           <span>CreateTime</span>
-          <p>{moment(startTime).format('YYYY-MM-DD HH:mm')}</p>
+          <p>{moment(registered_time).format('YYYY-MM-DD HH:mm')}</p>
         </div>
         <div className={styles.listContentStateItem}>
           <span>Status</span>
           <p>
-            <Badge status={status} text={status} />
+            <Badge status="success" text={active} />
           </p>
         </div>
       </div>
@@ -92,13 +98,13 @@ export default class Details extends Component {
         <Card bordered={false}>
           <Row>
             <Col sm={8} xs={24}>
-              <Info title="Manager" value="1 Server" bordered />
+              <Info title="Election" value="1 Server" bordered />
             </Col>
             <Col sm={8} xs={24}>
               <Info title="Master" value="1 Server" bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="Agent" value="3 Server" />
+              <Info title="Agent" value={list.length + ' Server'} />
             </Col>
           </Row>
         </Card>
@@ -126,8 +132,8 @@ export default class Details extends Component {
                       size="large"
                     />
                   }
-                  title={<a href={item.href}>{item.name}</a>}
-                  description={item.desc}
+                  title={<a href={item.href}>{item.agent_info.hostname}</a>}
+                  description={item.pid}
                 />
                 <ListContent data={item} />
               </List.Item>

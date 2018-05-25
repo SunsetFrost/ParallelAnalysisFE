@@ -73,17 +73,16 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
     '/home': {
-      //component: dynamicWrapper(app, [], () => import('../routes/Home')),
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
     '/cluster/detail': {
-      component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Detail')),
+      component: dynamicWrapper(app, ['mesos'], () => import('../routes/Cluster/Detail')),
     },
     '/cluster/manage': {
       component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Manage')),
     },
     '/cluster/monitor': {
-      component: dynamicWrapper(app, ['server'], () => import('../routes/Cluster/Monitor')),
+      component: dynamicWrapper(app, ['mesos'], () => import('../routes/Cluster/Monitor')),
     },
     '/datacenter/detail': {
       component: dynamicWrapper(app, [], () => import('../routes/DataCenter/Detail')),
