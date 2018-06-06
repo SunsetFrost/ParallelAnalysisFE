@@ -15,14 +15,14 @@ import {
   Menu,
   Progress,
   Modal,
-  Steps,
+  Steps
 } from 'antd';
 
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
 
 import styles from '../List/Applications.less';
-import myStyles from './Monitor.less';
+import myStyles from './Monitor.less'
 import { stat } from 'fs';
 import { reverse } from 'lodash';
 import Success from '../Result/Success';
@@ -78,10 +78,10 @@ export default class Monitor extends Component {
   };
 
   percentageFormat = (percent, successPercent) => {
-    return (
+    return(
       percent + '%'
       //'Task 343/1000' + percent + '%'
-    );
+    ) 
   };
 
   render() {
@@ -219,7 +219,9 @@ export default class Monitor extends Component {
                   />
                 </div>
               </Card>
-              <Card />
+              <Card>
+
+              </Card>
             </List.Item>
           )}
         />
@@ -234,20 +236,34 @@ export default class Monitor extends Component {
             <div className={myStyles.instanceInfo}>
               <Row>
                 <Col span={6}>
-                  <div className={myStyles.instanceTitle}>Agent A</div>
+                  <div className={myStyles.instanceTitle}>
+                    Agent A
+                  </div>
                 </Col>
                 <Col span={18}>
                   <Row>
-                    <Col span={12}>Create Time: XXXXXXX</Col>
-                    <Col span={12}>IP: XXXXXXXXXX</Col>
+                    <Col span={12}>
+                      Create Time: XXXXXXX
+                    </Col>
+                    <Col span={12}>
+                      IP: XXXXXXXXXX
+                    </Col>
                   </Row>
                   <Row>
-                    <Col span={12}>CPU: 2GHz</Col>
-                    <Col span={12}>Mem: 3GHz</Col>
+                    <Col span={12}>
+                      CPU: 2GHz
+                    </Col>
+                    <Col span={12}>
+                      Mem: 3GHz
+                    </Col>
                   </Row>
                   <Row>
-                    <Col span={12}>TaskNum: 1000</Col>
-                    <Col span={12}>CompleteTask: 36</Col>
+                    <Col span={12}>
+                      TaskNum: 1000
+                    </Col>
+                    <Col span={12}>
+                      CompleteTask: 36
+                    </Col>
                   </Row>
                 </Col>
               </Row>
@@ -255,24 +271,22 @@ export default class Monitor extends Component {
             <div className={myStyles.instanceInner}>
               <Steps size="small" current={1}>
                 <Step title="Staging" />
-                <Step title="Stage One" />
+                                                                                                                    <Step title="Stage One" />
                 <Step title="Stage Two" />
-                <Step title="Stage Three" />
+                <Step title="Stage Three"/>
               </Steps>
             </div>
             <div>
-              <Progress
-                percent={30}
+              <Progress 
+                percent={30} 
                 format={this.percentageFormat}
                 //status="success "
-                style={
-                  {
-                    // width: 200
-                    // .ant-progress-text {
-                    //   width: 10em;
-                    // }
-                  }
-                }
+                style={{ 
+                  // width: 200 
+                  // .ant-progress-text {
+                  //   width: 10em;
+                  // }
+                }}
               />
             </div>
           </section>
@@ -280,20 +294,34 @@ export default class Monitor extends Component {
             <div className={myStyles.instanceInfo}>
               <Row>
                 <Col span={6}>
-                  <div className={myStyles.instanceTitle}>Agent B</div>
+                  <div className={myStyles.instanceTitle}>
+                    Agent B
+                  </div>
                 </Col>
                 <Col span={18}>
                   <Row>
-                    <Col span={12}>Create Time: XXXXXXX</Col>
-                    <Col span={12}>IP: XXXXXXXXXX</Col>
+                    <Col span={12}>
+                      Create Time: XXXXXXX
+                    </Col>
+                    <Col span={12}>
+                      IP: XXXXXXXXXX
+                    </Col>
                   </Row>
                   <Row>
-                    <Col span={12}>CPU: 2GHz</Col>
-                    <Col span={12}>Mem: 3GHz</Col>
+                    <Col span={12}>
+                      CPU: 2GHz
+                    </Col>
+                    <Col span={12}>
+                      Mem: 3GHz
+                    </Col>
                   </Row>
                   <Row>
-                    <Col span={12}>TaskNum: 1000</Col>
-                    <Col span={12}>CompleteTask: 36</Col>
+                    <Col span={12}>
+                      TaskNum: 1000
+                    </Col>
+                    <Col span={12}>
+                      CompleteTask: 36
+                    </Col>
                   </Row>
                 </Col>
               </Row>
@@ -303,22 +331,20 @@ export default class Monitor extends Component {
                 <Step title="Staging" />
                 <Step title="Stage One" />
                 <Step title="Stage Two" />
-                <Step title="Stage Three" />
+                <Step title="Stage Three"/>
               </Steps>
             </div>
             <div>
-              <Progress
-                percent={60}
+              <Progress 
+                percent={60} 
                 format={this.percentageFormat}
                 //status="success "
-                style={
-                  {
-                    // width: 200
-                    // .ant-progress-text {
-                    //   width: 10em;
-                    // }
-                  }
-                }
+                style={{ 
+                  // width: 200 
+                  // .ant-progress-text {
+                  //   width: 10em;
+                  // }
+                }}
               />
             </div>
           </section>

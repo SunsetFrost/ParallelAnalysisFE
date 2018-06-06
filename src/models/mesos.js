@@ -133,10 +133,10 @@ export default {
       };
     },
     getInstance(state, { payload }) {
-      return {
+      return({
         ...state,
         instances: payload,
-      };
-    },
+      });
+    }
   },
 };
