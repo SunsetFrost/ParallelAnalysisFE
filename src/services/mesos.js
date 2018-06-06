@@ -2,15 +2,15 @@ import request from '../utils/request';
 
 import setting from '../common/setting';
 
-export async function getTest() {
+export async function queryTest() {
   const url = setting.mesos_ip + ':' + setting.mesos_port + '/test';
   return request(url, {
     method: 'GET',
   });
 }
 
-export async function getMaster() {
-  const url = setting.mesos_ip + ':' + setting.mesos_port + '/api/v1';
+export async function queryMaster() {
+  const url = setting.mesos_ip + ':' + setting.mesos_port + '/mesos/api/v1';
   return request(url, {
     method: 'POST',
     body: {
@@ -19,8 +19,8 @@ export async function getMaster() {
   });
 }
 
-export async function getAgents() {
-  const url = setting.mesos_ip + ':' + setting.mesos_port + '/api/v1';
+export async function queryAgents() {
+  const url = setting.mesos_ip + ':' + setting.mesos_port + '/mesos/api/v1';
   const option = {
     method: 'POST',
     body: {
@@ -31,9 +31,17 @@ export async function getAgents() {
   return request(url, option);
 }
 
-export async function getFrameworks() {
-  const url = setting.mesos_ip + ':' + setting.mesos_port + '/frameworks';
+export async function queryFrameworks() {
+  const url = setting.mesos_ip + ':' + setting.mesos_port + '/mesos/frameworks';
   return request(url, {
     method: 'GET',
+  });
+}
+
+export async function queryInstances() {
+  const url = setting.mesos_ip + ':' + setting.mesos_port + '/instance';
+  return request(url, {
+    method: 'POST',
+    body: {},
   });
 }

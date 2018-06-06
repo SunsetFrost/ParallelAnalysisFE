@@ -15,15 +15,19 @@ import {
   Menu,
   Progress,
   Modal,
+  Steps,
 } from 'antd';
 
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
 
 import styles from '../List/Applications.less';
+import myStyles from './Monitor.less';
 import { stat } from 'fs';
 import { reverse } from 'lodash';
+import Success from '../Result/Success';
 
+const Step = Steps.Step;
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 12;
@@ -71,6 +75,13 @@ export default class Monitor extends Component {
         pageSize: pageSize,
       },
     });
+  };
+
+  percentageFormat = (percent, successPercent) => {
+    return (
+      percent + '%'
+      //'Task 343/1000' + percent + '%'
+    );
   };
 
   render() {
@@ -208,18 +219,109 @@ export default class Monitor extends Component {
                   />
                 </div>
               </Card>
+              <Card />
             </List.Item>
           )}
         />
         <Modal
-          title="Detail Modal"
+          title="ParallelProgramTest"
           visible={this.state.visibleModalDetail}
           footer={null}
           onCancel={this.handleModalCancel}
+          width={800}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <section className={myStyles.instanceList}>
+            <div className={myStyles.instanceInfo}>
+              <Row>
+                <Col span={6}>
+                  <div className={myStyles.instanceTitle}>Agent A</div>
+                </Col>
+                <Col span={18}>
+                  <Row>
+                    <Col span={12}>Create Time: XXXXXXX</Col>
+                    <Col span={12}>IP: XXXXXXXXXX</Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>CPU: 2GHz</Col>
+                    <Col span={12}>Mem: 3GHz</Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>TaskNum: 1000</Col>
+                    <Col span={12}>CompleteTask: 36</Col>
+                  </Row>
+                </Col>
+              </Row>
+            </div>
+            <div className={myStyles.instanceInner}>
+              <Steps size="small" current={1}>
+                <Step title="Staging" />
+                <Step title="Stage One" />
+                <Step title="Stage Two" />
+                <Step title="Stage Three" />
+              </Steps>
+            </div>
+            <div>
+              <Progress
+                percent={30}
+                format={this.percentageFormat}
+                //status="success "
+                style={
+                  {
+                    // width: 200
+                    // .ant-progress-text {
+                    //   width: 10em;
+                    // }
+                  }
+                }
+              />
+            </div>
+          </section>
+          <section className={myStyles.instanceList}>
+            <div className={myStyles.instanceInfo}>
+              <Row>
+                <Col span={6}>
+                  <div className={myStyles.instanceTitle}>Agent B</div>
+                </Col>
+                <Col span={18}>
+                  <Row>
+                    <Col span={12}>Create Time: XXXXXXX</Col>
+                    <Col span={12}>IP: XXXXXXXXXX</Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>CPU: 2GHz</Col>
+                    <Col span={12}>Mem: 3GHz</Col>
+                  </Row>
+                  <Row>
+                    <Col span={12}>TaskNum: 1000</Col>
+                    <Col span={12}>CompleteTask: 36</Col>
+                  </Row>
+                </Col>
+              </Row>
+            </div>
+            <div className={myStyles.instanceInner}>
+              <Steps size="small" current={2}>
+                <Step title="Staging" />
+                <Step title="Stage One" />
+                <Step title="Stage Two" />
+                <Step title="Stage Three" />
+              </Steps>
+            </div>
+            <div>
+              <Progress
+                percent={60}
+                format={this.percentageFormat}
+                //status="success "
+                style={
+                  {
+                    // width: 200
+                    // .ant-progress-text {
+                    //   width: 10em;
+                    // }
+                  }
+                }
+              />
+            </div>
+          </section>
         </Modal>
       </div>
     );

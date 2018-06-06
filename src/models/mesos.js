@@ -1,4 +1,4 @@
-import { getMaster, getAgents, getFrameworks } from '../services/mesos';
+import { queryMaster, queryAgents, queryFrameworks, queryInstances } from '../services/mesos';
 import _ from 'lodash';
 
 export default {
@@ -11,38 +11,46 @@ export default {
       list: [],
       pagination: {},
     },
+    instances: [],
   },
 
   effects: {
     *fetchMaster(_, { call, put }) {
-      const response = yield call(getMaster);
+      const response = yield call(queryMaster);
       yield put({
         type: 'getMaster',
         payload: response,
       });
     },
     *fetchAgents(_, { call, put }) {
-      const response = yield call(getAgents);
+      const response = yield call(queryAgents);
       yield put({
         type: 'getAgents',
         payload: response,
       });
     },
     *fetchFrameworks(_, { call, put }) {
-      const response = yield call(getFrameworks);
+      const response = yield call(queryFrameworks);
       yield put({
         type: 'getFrameworks',
         payload: response,
       });
     },
     *fetchFrameworksByPage({ payload }, { call, put }) {
-      const response = yield call(getFrameworks);
+      const response = yield call(queryFrameworks);
       yield put({
         type: 'getFrameworksByPage',
         payload: {
           ...payload,
           response,
         },
+      });
+    },
+    *fetchInstances({ payload }, { call, put }) {
+      const response = yield call(queryInstances);
+      yield put({
+        type: '',
+        payload: response,
       });
     },
   },
@@ -122,6 +130,12 @@ export default {
             total: newPayload.length,
           },
         },
+      };
+    },
+    getInstance(state, { payload }) {
+      return {
+        ...state,
+        instances: payload,
       };
     },
   },
