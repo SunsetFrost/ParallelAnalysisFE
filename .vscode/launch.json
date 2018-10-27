@@ -9,7 +9,7 @@
             "request": "attach",
             "name": "Attach to Chrome",
             "port": 9035,
-            "webRoot": "${workspaceFolder}/src/index.ejs"
+            "webRoot": "${workspaceFolder}/src/index.js"
         },
         {
             "type": "chrome",

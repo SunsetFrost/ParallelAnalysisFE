@@ -24,27 +24,39 @@ const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const { Search } = Input;
 
-@connect(({ mesos, loading }) => ({
-  mesos,
+@connect(({ cluster, loading }) => ({
+  cluster,
   //loading: loading.effects['servers/fetchServers'],
-  loading: loading.effects['mesos/fetchAgents'],
+  loading: loading.effects['cluster/fetchServers'],
 }))
 export default class Details extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'mesos/fetchMaster',
-    });
-    dispatch({
-      type: 'mesos/fetchAgents',
+      type: 'cluster/fetchServers',
     });
   }
 
+  radioOnChange = e => {
+    const value = e.target.value;
+
+    if (value === 'all') {
+      this.props.dispatch({
+        type: 'cluster/fetchServers',
+      });
+    } else {
+      this.props.dispatch({
+        type: 'cluster/fetchServerByType',
+        payload: value,
+      });
+    }
+  };
+
   render() {
-    const { mesos, loading } = this.props;
-    // const list = [];
-    // console.log(mesos);
-    const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
+    const { cluster, loading } = this.props;
+    const list = cluster.list;
+    //console.log(list);
+    //const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>
@@ -56,7 +68,7 @@ export default class Details extends Component {
 
     const extraContent = (
       <div className={styles.extraContent}>
-        <RadioGroup defaultValue="all">
+        <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
           <RadioButton value="all">All</RadioButton>
           <RadioButton value="election">Election</RadioButton>
           <RadioButton value="master">Master</RadioButton>
@@ -70,24 +82,25 @@ export default class Details extends Component {
       </div>
     );
 
-    const ListContent = ({ data: { agent_info: { hostname }, registered_time, active } }) => (
+    const ListContent = ({ data: { ip, type, startTime, status } }) => (
       <div className={styles.listContent}>
         <div className={styles.listContentItem}>
-          <span>Group</span>
-          <p>IBIS</p>
-        </div>
-        <div className={styles.listContentItem}>
           <span>IP</span>
-          <p>{hostname}</p>
+          <p>{ip}</p>
         </div>
         <div className={styles.listContentItem}>
           <span>CreateTime</span>
-          <p>{moment(registered_time).format('YYYY-MM-DD HH:mm')}</p>
+          {/* <p>{moment(startTime).format('YYYY-MM-DD HH:mm')}</p> */}
+          <p>{moment(startTime).format('YYYY-MM-DD')}</p>
+        </div>
+        <div className={styles.listContentItem}>
+          <span>Type</span>
+          <p>{type}</p>
         </div>
         <div className={styles.listContentStateItem}>
           <span>Status</span>
           <p>
-            <Badge status="success" text={active} />
+            <Badge status="success" text={status} />
           </p>
         </div>
       </div>
@@ -104,7 +117,7 @@ export default class Details extends Component {
               <Info title="Master" value="1 Server" bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="Agent" value={list.length + ' Server'} />
+              <Info title="Agent" value={'5 Server'} />
             </Col>
           </Row>
         </Card>
@@ -132,8 +145,8 @@ export default class Details extends Component {
                       size="large"
                     />
                   }
-                  title={<a href={item.href}>{item.agent_info.hostname}</a>}
-                  description={item.pid}
+                  title={<a href={item.ip}>{item.name}</a>}
+                  description={item.desc}
                 />
                 <ListContent data={item} />
               </List.Item>

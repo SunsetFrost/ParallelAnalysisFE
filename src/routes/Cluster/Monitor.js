@@ -15,14 +15,14 @@ import {
   Menu,
   Progress,
   Modal,
-  Steps
+  Steps,
 } from 'antd';
 
 import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
 
 import styles from '../List/Applications.less';
-import myStyles from './Monitor.less'
+import myStyles from './Monitor.less';
 import { stat } from 'fs';
 import { reverse } from 'lodash';
 import Success from '../Result/Success';
@@ -33,9 +33,9 @@ const FormItem = Form.Item;
 const pageSize = 12;
 
 @Form.create()
-@connect(({ mesos, loading }) => ({
-  mesos,
-  loading: loading.effects['mesos/fetchFrameworksByPage'],
+@connect(({ instance, loading }) => ({
+  instance,
+  loading: loading.effects['instance/fetchInstance'],
 }))
 export default class Monitor extends Component {
   state = {
@@ -57,11 +57,7 @@ export default class Monitor extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'mesos/fetchFrameworksByPage',
-      payload: {
-        currentPage: 1,
-        pageSize: pageSize,
-      },
+      type: 'instance/fetchInstance',
     });
   }
 
@@ -78,15 +74,16 @@ export default class Monitor extends Component {
   };
 
   percentageFormat = (percent, successPercent) => {
-    return(
+    return (
       percent + '%'
       //'Task 343/1000' + percent + '%'
-    ) 
+    );
   };
 
   render() {
-    const { form, mesos, loading } = this.props;
-    const { list, pagination } = mesos.frameworks;
+    const { form, instance, loading } = this.props;
+    //const { list, pagination } = mesos.frameworks;
+    const list = instance.list;
 
     const { getFieldDecorator } = form;
 
@@ -97,11 +94,11 @@ export default class Monitor extends Component {
       },
     };
 
-    const paginationProps = {
-      pageSize: pageSize,
-      total: pagination.total,
-      onChange: this.handlePageChange,
-    };
+    // const paginationProps = {
+    //   pageSize: pageSize,
+    //   total: pagination.total,
+    //   onChange: this.handlePageChange,
+    // };
 
     const CardInfo = ({ activeUser, newUser }) => (
       <div className={styles.cardInfo}>
@@ -171,7 +168,7 @@ export default class Monitor extends Component {
           style={{ marginTop: 24 }}
           grid={{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
           loading={loading}
-          pagination={paginationProps}
+          //pagination={paginationProps}
           dataSource={list}
           renderItem={item => (
             <List.Item key={item.id}>
@@ -208,19 +205,16 @@ export default class Monitor extends Component {
                   title={item.name}
                 />
                 <div className={styles.cardItemContent}>
-                  <CardInfo activeUser={item.used_resources.cpus + 'GHz'} newUser="2" />
+                  <CardInfo activeUser={item.cpu + 'GHz'} newUser="2" />
                 </div>
                 <div>
                   <Progress
                     percent={Number('100')}
                     status="active"
                     strokeWidth={6}
-                    style={{ width: 200 }}
+                    style={{ width: '100%', marginTop: '10px' }}
                   />
                 </div>
-              </Card>
-              <Card>
-
               </Card>
             </List.Item>
           )}
@@ -235,57 +229,44 @@ export default class Monitor extends Component {
           <section className={myStyles.instanceList}>
             <div className={myStyles.instanceInfo}>
               <Row>
-                <Col span={6}>
-                  <div className={myStyles.instanceTitle}>
-                    Agent A
-                  </div>
+                <Col span={8}>
+                  <div className={myStyles.instanceTitle}>OGMS_ubuntu_slave1</div>
                 </Col>
-                <Col span={18}>
+                <Col span={16}>
                   <Row>
-                    <Col span={12}>
-                      Create Time: XXXXXXX
-                    </Col>
-                    <Col span={12}>
-                      IP: XXXXXXXXXX
-                    </Col>
+                    <Col span={12}>Create Time: 2018-04-18 13:53</Col>
+                    <Col span={12}>IP: 172.21.212.122</Col>
                   </Row>
                   <Row>
-                    <Col span={12}>
-                      CPU: 2GHz
-                    </Col>
-                    <Col span={12}>
-                      Mem: 3GHz
-                    </Col>
+                    <Col span={12}>CPU: 0GHz</Col>
+                    <Col span={12}>Mem: 0GHz</Col>
                   </Row>
                   <Row>
-                    <Col span={12}>
-                      TaskNum: 1000
-                    </Col>
-                    <Col span={12}>
-                      CompleteTask: 36
-                    </Col>
+                    <Col span={12}>TaskNum: 30</Col>
+                    <Col span={12}>CompleteTask: 30</Col>
                   </Row>
                 </Col>
               </Row>
             </div>
             <div className={myStyles.instanceInner}>
-              <Steps size="small" current={1}>
+              <Steps size="small" current={3}>
                 <Step title="Staging" />
-                                                                                                                    <Step title="Stage One" />
-                <Step title="Stage Two" />
-                <Step title="Stage Three"/>
+                <Step title="Stage One" />
+                <Step title="Stage Three" />
+                <Step title="Stage Three" />
               </Steps>
             </div>
             <div>
-              <Progress 
-                percent={30} 
-                format={this.percentageFormat}
+              <Progress
+                percent={100}
+                //format={this.percentageFormat}
+
                 //status="success "
-                style={{ 
-                  // width: 200 
+                style={{
+                  // width: 200
                   // .ant-progress-text {
                   //   width: 10em;
-                  // }
+                  margin: '12px 0px',
                 }}
               />
             </div>
@@ -293,58 +274,46 @@ export default class Monitor extends Component {
           <section className={myStyles.instanceList}>
             <div className={myStyles.instanceInfo}>
               <Row>
-                <Col span={6}>
-                  <div className={myStyles.instanceTitle}>
-                    Agent B
-                  </div>
+                <Col span={8}>
+                  <div className={myStyles.instanceTitle}>OGMS_ubuntu_slave2</div>
                 </Col>
-                <Col span={18}>
+                <Col span={16}>
                   <Row>
-                    <Col span={12}>
-                      Create Time: XXXXXXX
-                    </Col>
-                    <Col span={12}>
-                      IP: XXXXXXXXXX
-                    </Col>
+                    <Col span={12}>Create Time: 2018-04-18 13:54</Col>
+                    <Col span={12}>IP: 172.21.213.117</Col>
                   </Row>
                   <Row>
-                    <Col span={12}>
-                      CPU: 2GHz
-                    </Col>
-                    <Col span={12}>
-                      Mem: 3GHz
-                    </Col>
+                    <Col span={12}>CPU: 0GHz</Col>
+                    <Col span={12}>Mem: 0GHz</Col>
                   </Row>
                   <Row>
-                    <Col span={12}>
-                      TaskNum: 1000
-                    </Col>
-                    <Col span={12}>
-                      CompleteTask: 36
-                    </Col>
+                    <Col span={12}>TaskNum: 30</Col>
+                    <Col span={12}>CompleteTask: 30</Col>
                   </Row>
                 </Col>
               </Row>
             </div>
             <div className={myStyles.instanceInner}>
-              <Steps size="small" current={2}>
+              <Steps size="small" current={3}>
                 <Step title="Staging" />
                 <Step title="Stage One" />
                 <Step title="Stage Two" />
-                <Step title="Stage Three"/>
+                <Step title="Stage Three" />
               </Steps>
             </div>
             <div>
-              <Progress 
-                percent={60} 
-                format={this.percentageFormat}
+              <Progress
+                percent={100}
+                //format={this.percentageFormat}
                 //status="success "
-                style={{ 
-                  // width: 200 
-                  // .ant-progress-text {
-                  //   width: 10em;
-                  // }
-                }}
+                style={
+                  {
+                    //width: 220px
+                    // .ant-progress-text {
+                    //   width: 10em;
+                    // }
+                  }
+                }
               />
             </div>
           </section>
