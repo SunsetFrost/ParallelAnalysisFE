@@ -13,7 +13,7 @@ export async function createInstance(task) {
   return request(url, {
     method: 'POST',
     body: {
-      task: task
-    }
-  })
+      task: task,
+    },
+  });
 }

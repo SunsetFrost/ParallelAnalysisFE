@@ -20,8 +20,8 @@ export default {
       yield put({
         type: '',
         payload: response,
-      })
-    }
+      });
+    },
   },
 
   reducers: {
@@ -34,7 +34,7 @@ export default {
     addOneInstance(state, { payload }) {
       return {
         ...state,
-        _id: payload
+        _id: payload,
       };
     },
   },
