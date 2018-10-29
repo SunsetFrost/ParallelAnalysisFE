@@ -22,7 +22,7 @@ import TagSelect from 'components/TagSelect';
 import StandardFormRow from 'components/StandardFormRow';
 
 import styles from '../List/Applications.less';
-import myStyles from './Monitor.less';
+import myStyles from './Instance.less';
 import { stat } from 'fs';
 import { reverse } from 'lodash';
 import Success from '../Result/Success';

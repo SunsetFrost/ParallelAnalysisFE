@@ -19,8 +19,8 @@ export default class Manage extends Component {
   }
 
   renderList() {
-    const { server } = this.props;
-    const agentlog = server.agentlog;
+    //const { server } = this.props;
+    const agentlog = null;
     if (agentlog) {
       return agentlog.map(item => {
         return (

@@ -5,7 +5,6 @@ import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
-import { getServers, getInstance, getAgentLog } from './mock/servers';
 import { getNotebook } from './mock/notebook';
 import { getData } from './mock/data';
 import { format, delay } from 'roadhog-api-doc';
@@ -138,9 +137,7 @@ const proxy = {
       path: '/base/category/list',
     });
   },
-  'GET /api/servers': getServers,
-  'GET /api/instance': getInstance,
-  'GET /api/agentlog': getAgentLog,
+
   'GET /api/notebook': getNotebook,
   'GET /api/data': getData,
 };

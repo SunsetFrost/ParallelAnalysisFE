@@ -114,9 +114,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'Model Parallel';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - Ant Design Pro`;
+      title = `${routerData[pathname].name} - Model Parallel`;
     }
     return title;
   }
@@ -147,7 +147,7 @@ class BasicLayout extends React.PureComponent {
     });
   };
   handleNoticeClear = type => {
-    message.success(`清空了${type}`);
+    message.success(`clear${type}`);
     this.props.dispatch({
       type: 'global/clearNotices',
       payload: type,
@@ -242,7 +242,7 @@ class BasicLayout extends React.PureComponent {
                 {
                   key: 'github',
                   title: <Icon type="github" />,
-                  href: 'https://github.com/ant-design/ant-design-pro',
+                  href: 'https://github.com/SunsetFrost/ParallelAnalysisFE',
                   blankTarget: true,
                 },
                 {

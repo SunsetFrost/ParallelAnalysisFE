@@ -1,5 +1,4 @@
-import { queryInstance } from '../services/instance';
-import _ from 'lodash';
+import { queryInstance, createInstance } from '../services/instance';
 
 export default {
   namespace: 'instance',
@@ -16,6 +15,13 @@ export default {
         payload: response,
       });
     },
+    *add({ payload }, { call, put }) {
+      const response = yield call(createInstance, payload);
+      yield put({
+        type: '',
+        payload: response,
+      })
+    }
   },
 
   reducers: {
@@ -23,6 +29,12 @@ export default {
       return {
         ...state,
         list: payload.data,
+      };
+    },
+    addOneInstance(state, { payload }) {
+      return {
+        ...state,
+        _id: payload
       };
     },
   },
