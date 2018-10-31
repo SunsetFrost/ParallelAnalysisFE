@@ -2,6 +2,7 @@ import * as React from 'react';
 export interface IPieProps {
   animate?: boolean;
   color?: string;
+  colors?: string[];
   height: number;
   hasLegend?: boolean;
   padding?: [number, number, number, number];
@@ -10,7 +11,7 @@ export interface IPieProps {
     x: string | string;
     y: number;
   }>;
-  total?: string | function;
+  total?: React.ReactNode | number | (() => React.ReactNode | number);
   title?: React.ReactNode;
   tooltip?: boolean;
   valueFormat?: (value: string) => string | React.ReactNode;

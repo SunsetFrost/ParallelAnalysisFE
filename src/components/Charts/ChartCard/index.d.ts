@@ -1,8 +1,10 @@
+import { CardProps } from 'antd/lib/card';
 import * as React from 'react';
-export interface IChartCardProps {
+
+export interface IChartCardProps extends CardProps {
   title: React.ReactNode;
   action?: React.ReactNode;
-  total?: React.ReactNode | function | number;
+  total?: React.ReactNode | number | (() => React.ReactNode | number);
   footer?: React.ReactNode;
   contentHeight?: number;
   avatar?: React.ReactNode;
