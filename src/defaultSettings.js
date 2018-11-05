@@ -6,4 +6,10 @@ module.exports = {
   fixedHeader: false, // sticky header
   autoHideHeader: false, // auto hide header
   fixSiderbar: false, // sticky siderbar
+
+  // custom setting
+  backEndDB: {
+    ip: '127.0.0.1',
+    port: '9315',
+},
 };

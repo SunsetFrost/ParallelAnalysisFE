@@ -28,7 +28,7 @@ export default [
       //cluster
       {
         path: '/cluster',
-        icon: 'laptop',
+        icon: 'cluster',
         name: 'Cluster',
         routes: [
           {
@@ -46,6 +46,34 @@ export default [
             name: 'Log',
             component: './Cluster/Log',
           },
+          {
+            path: '/cluster/create',
+            name: 'CreateInstance',
+            component: './Cluster/CreateInstance',
+            hideInMenu: true,
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/cluster/create',
+                redirect: '/cluster/create/model-cfg',
+              },
+              {
+                path: '/cluster/create/model-cfg',
+                name: 'ModelConfig',
+                component: '/Cluster/CreateInstance/Step1',
+              },
+              {
+                path: '/cluster/create/parall-cfg',
+                name: 'ParallConfig',
+                component: '/Cluster/CreateInstance/Step2',
+              },
+              {
+                path: '/cluster/create/result',
+                name: 'Result',
+                component: '/Cluster/CreateInstance/Step3',
+              },
+            ]
+          }
         ],
       },
       //data
@@ -69,7 +97,7 @@ export default [
       // tool
       {
         path: '/tool',
-        icon: 'profile',
+        icon: 'tool',
         name: 'Tool',
         routes: [
           {
