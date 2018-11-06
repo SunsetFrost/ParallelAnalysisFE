@@ -20,11 +20,14 @@ import {
 
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
+import socketClient from 'socket.io-client'
 
 import styles from './Instance.less';
 import { stat } from 'fs';
 import router from 'umi/router';
+import setting from '@/defaultSettings';
 
+const socket = socketClient(`http://${setting.backEndDB.ip}:${setting.backEndDB.port}`);
 const Step = Steps.Step;
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -38,7 +41,7 @@ const pageSize = 12;
 export default class Instance extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
-    console.log('dispath works');
+
     dispatch({
       type: 'instance/fetchInstance',
     });
@@ -46,6 +49,9 @@ export default class Instance extends PureComponent {
     //   type: 'instance/changeInstanceOrder',
     //   payload: 'createTime', 
     // });
+    socket.on('INSTANCE_PROG', (data) => {
+      console.log(data);
+    })
   }
 
   handlePageChange = (page, pageSize) => {
@@ -106,7 +112,7 @@ export default class Instance extends PureComponent {
 
     const InstanceProgress = ({ status, totalNum, completeNum}) => (
       <Progress
-        percent={Number('23')}
+        percent={Number(Math.round(completeNum/totalNum*100))}
         strokeWidth={6}
         strokeColor={this.getProgressStyleByStatus(status)}
         style={{ width: '100%', marginTop: '10px' }}
@@ -181,20 +187,21 @@ export default class Instance extends PureComponent {
                 hoverable
                 bodyStyle={{ paddingBottom: 20 }}
                 actions={[
-                  <Tooltip title="Detail">
+                  <Tooltip title={(item.status == 'INIT')?'Start instance': 'Delete instance'}>
                     <Button
                       type="default"
-                      shape="circle"
-                      icon="bars"
+                      shape='circle'
+                      //icon={(item.status == 'INIT')?'caret-right': 'delete'}
+                      icon={'loading'}
                       size="small"
                       onClick={this.showDetailModal}
                     />
                   </Tooltip>,
-                  <Tooltip title="Add Agent">
-                    <Button type="default" shape="circle" icon="plus" size="small" />
+                  <Tooltip title="Detail">
+                    <Button type="default" shape="circle" icon="bars" size="small" />
                   </Tooltip>,
-                  <Tooltip title="Reduce Agent">
-                    <Button type="default" shape="circle" icon="minus" size="small" />
+                  <Tooltip title="Copy instance">
+                    <Button type="default" shape="circle" icon="copy" size="small" />
                   </Tooltip>,
                   <Tooltip title="View Data">
                     <Button type="default" shape="circle" icon="area-chart" size="small" />
@@ -213,7 +220,7 @@ export default class Instance extends PureComponent {
                   <CardInfo activeUser={'1GHz'} newUser="2" />
                 </div>
                 <div>
-                  <InstanceProgress status='INIT' totalNum={100} completeNum={10} />
+                  <InstanceProgress status={item.status} totalNum={100} completeNum={10} />
                 </div>
               </Card>
             </List.Item>
