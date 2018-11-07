@@ -20,14 +20,14 @@ import {
 
 import TagSelect from '@/components/TagSelect';
 import StandardFormRow from '@/components/StandardFormRow';
-import socketClient from 'socket.io-client'
+import socketClient from 'socket.io-client';
 
 import styles from './Instance.less';
 import { stat } from 'fs';
 import router from 'umi/router';
 import setting from '@/defaultSettings';
 
-const socket = socketClient(`http://${setting.backEndDB.ip}:${setting.backEndDB.port}`);
+let socket;
 const Step = Steps.Step;
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -40,18 +40,26 @@ const pageSize = 12;
 }))
 export default class Instance extends PureComponent {
   componentDidMount() {
+    console.log('instance component didmount');
     const { dispatch } = this.props;
 
     dispatch({
       type: 'instance/fetchInstance',
     });
-    // dispatch({
-    //   type: 'instance/changeInstanceOrder',
-    //   payload: 'createTime', 
-    // });
-    socket.on('INSTANCE_PROG', (data) => {
+
+    socket = socketClient(`http://${setting.backEndDB.ip}:${setting.backEndDB.port}`);
+    socket.on('INSTANCE_PROG', data => {
       console.log(data);
-    })
+      dispatch({
+        type: 'instance/getInstance',
+        payload: data,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    console.log('instance component unmount');
+    socket.close();
   }
 
   handlePageChange = (page, pageSize) => {
@@ -73,14 +81,61 @@ export default class Instance extends PureComponent {
     );
   };
 
-  getProgressStyleByStatus = (status) => {
-    if(status == 'INIT') {
-      return '#ff7a45';
+  onStartClick = (id, status) => {
+    if (status == 'INIT') {
+      const { dispatch } = this.props;
+      console.log('click start');
+      dispatch({
+        type: 'instance/start',
+        payload: {
+          id: id,
+        },
+      });
     }
-  }
+  };
+
+  getStyleByStatus = (status, type) => {
+    if (status == 'INIT') {
+      if (type == 'progress') {
+        return '#fff1b8';
+      } else if (type == 'icon') {
+        return 'caret-right';
+      } else if (type == 'tooltip') {
+        return 'Start instance';
+      }
+    } else if (status == 'START_PENDING') {
+      if (type == 'progress') {
+        return '#fff1b8';
+      } else if (type == 'icon') {
+        return 'loading';
+      } else if (type == 'tooltip') {
+        return 'Submit instance';
+      }
+    } else if (status == 'RUNNING') {
+      if (type == 'progress') {
+        return 'default';
+      } else if (type == 'icon') {
+        return 'delete';
+      } else if (type == 'tooltip') {
+        return 'Delete instance';
+      }
+    } else if (status == 'FINISHED_SUCCEED') {
+      if (type == 'progress') {
+        return '#52c41a';
+      } else if (type == 'icon') {
+        return 'delete';
+      } else if (type == 'tooltip') {
+        return 'Delete instance';
+      }
+    }
+  };
 
   render() {
-    const { form, instance: { list }, loading } = this.props;
+    const {
+      form,
+      instance: { list },
+      loading,
+    } = this.props;
     //const { list, pagination } = mesos.frameworks;
     const { getFieldDecorator } = form;
 
@@ -110,11 +165,22 @@ export default class Instance extends PureComponent {
       </div>
     );
 
-    const InstanceProgress = ({ status, totalNum, completeNum}) => (
+    function progressNumber(status, totalNum, completeNum) {
+      if (status == 'INIT' || status == 'START_PENDING') {
+        return 0;
+      } else if (status == 'RUNNING') {
+        //console.log(`${completeNum}    ${totalNum}`)
+        return Number(Math.round((completeNum / totalNum) * 100));
+      } else if (status == 'FINISHED_SUCCEED') {
+        return 100;
+      }
+    }
+
+    const InstanceProgress = ({ status, totalNum, completeNum }) => (
       <Progress
-        percent={Number(Math.round(completeNum/totalNum*100))}
+        percent={progressNumber(status, totalNum, completeNum)}
         strokeWidth={6}
-        strokeColor={this.getProgressStyleByStatus(status)}
+        strokeColor={this.getStyleByStatus(status, 'progress')}
         style={{ width: '100%', marginTop: '10px' }}
       />
     );
@@ -173,7 +239,15 @@ export default class Instance extends PureComponent {
             </StandardFormRow>
           </Form>
         </Card>
-        <Button className={ styles.btnCreate } type="primary" icon="plus" size='large' onClick={onCreInstance} >Create Instance</Button>
+        <Button
+          className={styles.btnCreate}
+          type="primary"
+          icon="plus"
+          size="large"
+          onClick={onCreInstance}
+        >
+          Create Instance
+        </Button>
         <List
           rowKey="id"
           style={{ marginTop: 24 }}
@@ -187,14 +261,13 @@ export default class Instance extends PureComponent {
                 hoverable
                 bodyStyle={{ paddingBottom: 20 }}
                 actions={[
-                  <Tooltip title={(item.status == 'INIT')?'Start instance': 'Delete instance'}>
+                  <Tooltip title={this.getStyleByStatus(item.status, 'tooltip')}>
                     <Button
                       type="default"
-                      shape='circle'
-                      //icon={(item.status == 'INIT')?'caret-right': 'delete'}
-                      icon={'loading'}
+                      shape="circle"
+                      icon={this.getStyleByStatus(item.status, 'icon')}
                       size="small"
-                      onClick={this.showDetailModal}
+                      onClick={() => this.onStartClick(item._id, item.status)}
                     />
                   </Tooltip>,
                   <Tooltip title="Detail">
@@ -210,8 +283,8 @@ export default class Instance extends PureComponent {
               >
                 <Card.Meta
                   avatar={
-                    <Avatar size="small" style={{ backgroundColor: '#87d068' }}>
-                      W
+                    <Avatar size="small" style={{ backgroundColor: '#1890ff' }}>
+                      B
                     </Avatar>
                   }
                   title={item.name}
@@ -220,7 +293,11 @@ export default class Instance extends PureComponent {
                   <CardInfo activeUser={'1GHz'} newUser="2" />
                 </div>
                 <div>
-                  <InstanceProgress status={item.status} totalNum={100} completeNum={10} />
+                  <InstanceProgress
+                    status={item.status}
+                    totalNum={item.numTasks.total}
+                    completeNum={item.numTasks.completed}
+                  />
                 </div>
               </Card>
             </List.Item>

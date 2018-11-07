@@ -36,7 +36,6 @@ export default class Server extends PureComponent {
   }
 
   radioOnChange = e => {
-    console.log(e);
     const value = e.target.value;
 
     if (value === 'all') {
@@ -52,7 +51,10 @@ export default class Server extends PureComponent {
   };
 
   render() {
-    const { server: { list }, loading } = this.props;
+    const {
+      server: { list },
+      loading,
+    } = this.props;
 
     //console.log(list);
     //const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
