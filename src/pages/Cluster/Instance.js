@@ -94,6 +94,15 @@ export default class Instance extends PureComponent {
     }
   };
 
+  onDetailClick = (id) => {
+    router.push({
+      pathname: '/cluster/instance-detail',
+      query: {
+        id: id,
+      }
+    })
+  };
+
   getStyleByStatus = (status, type) => {
     if (status == 'INIT') {
       if (type == 'progress') {
@@ -271,7 +280,12 @@ export default class Instance extends PureComponent {
                     />
                   </Tooltip>,
                   <Tooltip title="Detail">
-                    <Button type="default" shape="circle" icon="bars" size="small" />
+                    <Button
+                      type="default" 
+                      shape="circle" 
+                      icon="bars" 
+                      size="small" 
+                      onClick={() => this.onDetailClick(item._id)}/>
                   </Tooltip>,
                   <Tooltip title="Copy instance">
                     <Button type="default" shape="circle" icon="copy" size="small" />

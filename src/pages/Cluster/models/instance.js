@@ -22,6 +22,9 @@ export default {
       //     payload: 'createTime',
       // });
     },
+    *fetchInstanceById({ payload }, { call, put }) {
+
+    },
     *add({ payload }, { call, put }) {
       const { data } = yield call(createInstance, payload);
       yield put({
@@ -61,5 +64,26 @@ export default {
         };
       }
     },
+    detail(state, { payload }) {
+        return {
+            ...state,
+            detail: {
+                id: payload,
+            }
+        }
+    }
   },
+
+  subscriptions: {
+      setup({ dispatch, history }) {
+          history.listen((location) => {
+              if(location.pathname === '/cluster/instance-detail') {
+                  dispatch({
+                      type: 'detail',
+                      payload: location.query.id,
+                  })
+              }
+          })
+      }
+  }
 };

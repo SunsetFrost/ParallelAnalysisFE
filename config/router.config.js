@@ -42,6 +42,12 @@ export default [
             component: './Cluster/Instance',
           },
           {
+            path: '/cluster/instance-detail',
+            name: 'InstanceDetail',
+            component: './Cluster/InstanceDetail',
+            hideInMenu: true,
+          },
+          {
             path: '/cluster/log',
             name: 'Log',
             component: './Cluster/Log',
