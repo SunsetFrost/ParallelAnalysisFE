@@ -27,11 +27,40 @@ import { stat } from 'fs';
 import router from 'umi/router';
 import setting from '@/defaultSettings';
 
-let socket;
+let socket = socketClient(`http://${setting.backEndDB.ip}:${setting.backEndDB.port}`);
 const Step = Steps.Step;
 const { Option } = Select;
 const FormItem = Form.Item;
 const pageSize = 12;
+
+
+const getStyleByStatus = (status) => {
+  if (status == 'INIT') {
+    return {
+      progress: '#fff1b8',
+      icon: 'caret-right',
+      tooltip: 'Start instance'
+    }
+  } else if (status == 'START_PENDING') {
+    return {
+      progress: '#fff1b8',
+      icon: 'loading',
+      tooltip: 'Submit instance'
+    }
+  } else if (status == 'RUNNING') {
+    return {
+      progress: 'default',
+      icon: 'delete',
+      tooltip: 'Delete instance'
+    }
+  } else if (status == 'FINISHED_SUCCEED') {
+    return {
+      progress: '#52c41a',
+      icon: 'delete',
+      tooltip: 'Delete instance'
+    }
+  }
+};
 
 @Form.create()
 @connect(({ instance, loading }) => ({
@@ -47,9 +76,9 @@ export default class Instance extends PureComponent {
       type: 'instance/fetchInstance',
     });
 
-    socket = socketClient(`http://${setting.backEndDB.ip}:${setting.backEndDB.port}`);
+    
     socket.on('INSTANCE_PROG', data => {
-      console.log(data);
+      //console.log(data);
       dispatch({
         type: 'instance/getInstance',
         payload: data,
@@ -59,7 +88,7 @@ export default class Instance extends PureComponent {
 
   componentWillUnmount() {
     console.log('instance component unmount');
-    socket.close();
+    //socket.close();
   }
 
   handlePageChange = (page, pageSize) => {
@@ -101,42 +130,6 @@ export default class Instance extends PureComponent {
         id: id,
       }
     })
-  };
-
-  getStyleByStatus = (status, type) => {
-    if (status == 'INIT') {
-      if (type == 'progress') {
-        return '#fff1b8';
-      } else if (type == 'icon') {
-        return 'caret-right';
-      } else if (type == 'tooltip') {
-        return 'Start instance';
-      }
-    } else if (status == 'START_PENDING') {
-      if (type == 'progress') {
-        return '#fff1b8';
-      } else if (type == 'icon') {
-        return 'loading';
-      } else if (type == 'tooltip') {
-        return 'Submit instance';
-      }
-    } else if (status == 'RUNNING') {
-      if (type == 'progress') {
-        return 'default';
-      } else if (type == 'icon') {
-        return 'delete';
-      } else if (type == 'tooltip') {
-        return 'Delete instance';
-      }
-    } else if (status == 'FINISHED_SUCCEED') {
-      if (type == 'progress') {
-        return '#52c41a';
-      } else if (type == 'icon') {
-        return 'delete';
-      } else if (type == 'tooltip') {
-        return 'Delete instance';
-      }
-    }
   };
 
   render() {
@@ -189,7 +182,7 @@ export default class Instance extends PureComponent {
       <Progress
         percent={progressNumber(status, totalNum, completeNum)}
         strokeWidth={6}
-        strokeColor={this.getStyleByStatus(status, 'progress')}
+        strokeColor={getStyleByStatus(status).progress}
         style={{ width: '100%', marginTop: '10px' }}
       />
     );
@@ -199,55 +192,57 @@ export default class Instance extends PureComponent {
     };
 
     return (
-      <div className={styles.filterCardList}>
-        <Card bordered={false}>
-          <Form layout="inline">
-            <StandardFormRow title="Model" block style={{ paddingBottom: 11 }}>
-              <FormItem>
-                {getFieldDecorator('category')(
-                  <TagSelect onChange={this.handleFormSubmit}>
-                    <TagSelect.Option value="cat1">IBIS</TagSelect.Option>
-                    <TagSelect.Option value="cat2">LPJ</TagSelect.Option>
-                    <TagSelect.Option value="cat3">BIOME-BGC</TagSelect.Option>
-                  </TagSelect>
-                )}
-              </FormItem>
-            </StandardFormRow>
-            <StandardFormRow title="Option" grid last>
-              <Row gutter={16}>
-                <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="Status">
-                    {getFieldDecorator('author', {})(
-                      <Select
-                        onChange={this.handleFormSubmit}
-                        placeholder="All"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
-                        <Option value="run">Running</Option>
-                        <Option value="finish">Finish</Option>
-                        <Option value="error">Error</Option>
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col lg={8} md={10} sm={10} xs={24}>
-                  <FormItem {...formItemLayout} label="Invoker">
-                    {getFieldDecorator('rate', {})(
-                      <Select
-                        onChange={this.handleFormSubmit}
-                        placeholder="All"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
-                        <Option value="good">OGMS</Option>
-                        <Option value="normal">ZhongShan</Option>
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-            </StandardFormRow>
-          </Form>
-        </Card>
+      <div>
+        <div className={styles.filterCardList}>
+          <Card bordered={false}>
+            <Form layout="inline">
+              <StandardFormRow title="Model" block style={{ paddingBottom: 11 }}>
+                <FormItem>
+                  {getFieldDecorator('category')(
+                    <TagSelect onChange={this.handleFormSubmit}>
+                      <TagSelect.Option value="cat1">IBIS</TagSelect.Option>
+                      <TagSelect.Option value="cat2">LPJ</TagSelect.Option>
+                      <TagSelect.Option value="cat3">BIOME-BGC</TagSelect.Option>
+                    </TagSelect>
+                  )}
+                </FormItem>
+              </StandardFormRow>
+              <StandardFormRow title="Option" grid last>
+                <Row gutter={16}>
+                  <Col lg={8} md={10} sm={10} xs={24}>
+                    <FormItem {...formItemLayout} label="Status">
+                      {getFieldDecorator('author', {})(
+                        <Select
+                          onChange={this.handleFormSubmit}
+                          placeholder="All"
+                          style={{ maxWidth: 200, width: '100%' }}
+                        >
+                          <Option value="run">Running</Option>
+                          <Option value="finish">Finish</Option>
+                          <Option value="error">Error</Option>
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col lg={8} md={10} sm={10} xs={24}>
+                    <FormItem {...formItemLayout} label="Invoker">
+                      {getFieldDecorator('rate', {})(
+                        <Select
+                          onChange={this.handleFormSubmit}
+                          placeholder="All"
+                          style={{ maxWidth: 200, width: '100%' }}
+                        >
+                          <Option value="good">OGMS</Option>
+                          <Option value="normal">ZhongShan</Option>
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+              </StandardFormRow>
+            </Form>
+          </Card>
+        </div>
         <Button
           className={styles.btnCreate}
           type="primary"
@@ -270,11 +265,11 @@ export default class Instance extends PureComponent {
                 hoverable
                 bodyStyle={{ paddingBottom: 20 }}
                 actions={[
-                  <Tooltip title={this.getStyleByStatus(item.status, 'tooltip')}>
+                  <Tooltip title={getStyleByStatus(item.status).tooltip}>
                     <Button
                       type="default"
                       shape="circle"
-                      icon={this.getStyleByStatus(item.status, 'icon')}
+                      icon={getStyleByStatus(item.status).icon}
                       size="small"
                       onClick={() => this.onStartClick(item._id, item.status)}
                     />

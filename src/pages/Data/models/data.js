@@ -1,10 +1,11 @@
-import { queryData } from '@/services/data';
+import { queryData, downloadData } from '@/services/data';
 
 export default {
     namespace: 'data',
 
     state: {
         list: [],
+        detail: {},
     },
 
     effects: {
@@ -15,6 +16,11 @@ export default {
                 payload: data,
             });
         },
+        *downloadDataFile({ payload }, { call, put }) {
+            yield call(downloadData(payload));
+
+        }
+
     },
 
     reducers: {
@@ -24,5 +30,24 @@ export default {
                 list: payload,
             };
         },
+        detail(state, { payload }) {
+            return {
+                ...state,
+                detail: {
+                    id: payload,
+                }
+            }
+        }
     },
+
+    subscriptions: {
+        setup({ dispatch, history }) {
+            history.listen((location) => {
+                dispatch({
+                    type: 'detail',
+                    payload: location.query.id,
+                })
+            })
+        }
+    }
 };

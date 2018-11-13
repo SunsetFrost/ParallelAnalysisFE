@@ -2,7 +2,7 @@
 @import '~@/utils/utils.less';
 
 .filterCardList {
-  margin-bottom: -24px;
+  margin-bottom: 18px;
   :global {
     .ant-card-meta-content {
       margin-top: 0;
@@ -18,33 +18,30 @@
       max-width: 100%;
     }
   }
-  .btnCreate {
-    margin-top: 18px;
-  }
-  .cardInfo {
-    .clearfix();
-    margin-top: 16px;
-    margin-left: 40px;
-    & > div {
-      position: relative;
-      text-align: left;
-      float: left;
-      width: 50%;
-      p {
-        line-height: 32px;
-        font-size: 24px;
-        margin: 0;
-      }
-      p:first-child {
-        color: @text-color-secondary;
-        font-size: 12px;
-        line-height: 20px;
-        margin-bottom: 4px;
-      }
+}
+
+.cardInfo {
+  .clearfix();
+  margin-top: 16px;
+  margin-left: 40px;
+  & > div {
+    position: relative;
+    text-align: left;
+    float: left;
+    width: 50%;
+    p {
+      line-height: 32px;
+      font-size: 24px;
+      margin: 0;
+    }
+    p:first-child {
+      color: @text-color-secondary;
+      font-size: 12px;
+      line-height: 20px;
+      margin-bottom: 4px;
     }
   }
 }
-
 
 .instanceList {
     border-bottom: 1px solid #e8e8e8;

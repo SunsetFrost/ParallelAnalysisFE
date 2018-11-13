@@ -74,10 +74,11 @@ export default {
     }
   },
 
-  subscriptions: {
-      setup({ dispatch, history }) {
+  subscriptions: {      
+      setup({ dispatch, history }) {          
           history.listen((location) => {
               if(location.pathname === '/cluster/instance-detail') {
+                console.log('history trigger!~!!!!');
                   dispatch({
                       type: 'detail',
                       payload: location.query.id,
