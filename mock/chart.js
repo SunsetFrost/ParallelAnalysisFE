@@ -21,13 +21,49 @@ for (let i = 0; i < fakeY2.length; i += 1) {
   });
 }
 
-const salesData = [];
-for (let i = 0; i < 12; i += 1) {
-  salesData.push({
-    x: `${i + 1}月`,
-    y: Math.floor(Math.random() * 1000) + 200,
+const visitData3 = [];
+const fakeY3 = [1, 2, 3, 5, 5, 5, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5];
+for (let i = 0; i < fakeY3.length; i += 1) {
+  visitData3.push({
+    x: moment(new Date(beginDay + 1000 * 60 * 60 * 24 * i)).format('YYYY-MM-DD'),
+    y: fakeY3[i],
   });
 }
+
+const visitData4 = [];
+const fakeY4 = [2, 4, 3, 6, 3, 4, 2, 2, 4, 4, 5, 5, 6, 3, 3];
+for (let i = 0; i < fakeY4.length; i += 1) {
+  visitData4.push({
+    x: moment(new Date(beginDay + 1000 * 60 * 60 * 24 * i)).format('YYYY-MM-DD'),
+    y: fakeY4[i],
+  });
+}
+
+const visitData5 = [];
+const fakeY5 = [12, 10, 6, 8, 14, 7, 9, 12, 8, 12, 12, 16, 15];
+for (let i = 0; i < fakeY5.length; i += 1) {
+  visitData5.push({
+    x: moment(new Date(beginDay + 1000 * 60 * 60 * 24 * i)).format('YYYY-MM-DD'),
+    y: fakeY5[i],
+  });
+}
+
+const salesData = [];
+for (let i = 0; i < 15; i += 1) {
+  salesData.push({
+    x: `${i + 1} day`,
+    y: Math.floor(Math.random() * 100) + 20,
+  });
+}
+
+const salesData2 = [];
+for (let i = 0; i < 15; i += 1) {
+  salesData2.push({
+    x: `${i + 1} day`,
+    y: Math.floor(Math.random() * 10) + 2,
+  });
+}
+
 const searchData = [];
 for (let i = 0; i < 50; i += 1) {
   searchData.push({
@@ -181,7 +217,11 @@ radarOriginData.forEach(item => {
 const getFakeChartData = {
   visitData,
   visitData2,
+  visitData3,
+  visitData4,
+  visitData5,
   salesData,
+  salesData2,
   searchData,
   offlineData,
   offlineChartData,

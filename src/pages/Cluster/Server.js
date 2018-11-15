@@ -117,7 +117,7 @@ export default class Server extends PureComponent {
               <Info title="Master" value="1 Server" bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="Agent" value={'5 Server'} />
+              <Info title="Agent" value={'4 Server'} />
             </Col>
           </Row>
         </Card>
