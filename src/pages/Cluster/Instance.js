@@ -83,6 +83,9 @@ export default class Instance extends PureComponent {
         type: 'instance/getInstance',
         payload: data,
       });
+      dispatch({
+        type: 'instance/setDetail',
+      });
     });
   }
 
@@ -154,15 +157,15 @@ export default class Instance extends PureComponent {
     //   onChange: this.handlePageChange,
     // };
 
-    const CardInfo = ({ activeUser, newUser }) => (
+    const CardInfo = ({ cpu, agent }) => (
       <div className={styles.cardInfo}>
         <div>
           <p>CPU</p>
-          <p>{activeUser}</p>
+          <p>{cpu}</p>
         </div>
         <div>
           <p>Agent</p>
-          <p>{newUser}</p>
+          <p>{agent}</p>
         </div>
       </div>
     );
@@ -299,7 +302,7 @@ export default class Instance extends PureComponent {
                   title={item.name}
                 />
                 <div className={styles.cardItemContent}>
-                  <CardInfo activeUser={'1GHz'} newUser="2" />
+                  <CardInfo cpu={`${item.parallCfg.cpuCfg}GHz`} agent="3" />
                 </div>
                 <div>
                   <InstanceProgress

@@ -6,7 +6,9 @@ export default {
 
   state: {
     list: [],
-    detail: {},
+    detail: {
+      id: '',
+    },
   },
 
   effects: {
@@ -64,13 +66,32 @@ export default {
         };
       }
     },
-    detail(state, { payload }) {
+    setDetailId(state, { payload }) {
         return {
             ...state,
             detail: {
-                id: payload,
+                _id: payload,
             }
         }
+    },
+    setDetail(state) {
+      let newDetail = state.detail;
+      if(newDetail.id != '') {
+        newDetail = state.list.filter(item => {
+          if(item._id === newDetail._id) {
+              return true;
+          } else {
+              return false;
+          }
+        })[0]
+      }
+
+      return {
+        ...state,
+        detail: {
+          ...newDetail,
+        },
+      }
     }
   },
 
@@ -80,8 +101,11 @@ export default {
               if(location.pathname === '/cluster/instance-detail') {
                 console.log('history trigger!~!!!!');
                   dispatch({
-                      type: 'detail',
-                      payload: location.query.id,
+                    type: 'setDetailId',
+                    payload: location.query.id,
+                  });
+                  dispatch({
+                    type: 'setDetail',
                   })
               }
           })

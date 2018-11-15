@@ -66,31 +66,31 @@ const mockRightContent1 = [
 
 const mockRightContent2 = [
   {
-    title: 'instance11071622',
+    title: 'data11071622',
     total: '14', 
   },
   {
-    title: 'instance11092033',
+    title: 'data11092033',
     total: '12',
   },
   {
-    title: 'instance11092038',
+    title: 'data11092038',
     total: '9',
   },
   {
-    title: 'instance11092042',
+    title: 'data11092042',
     total: '4'
   },
   {
-    title: 'instance11092206',
+    title: 'data11092206',
     total: '3'
   },
   {
-    title: 'instance11092246',
+    title: 'data11092246',
     total: '1'
   },
   {
-    title: 'instance11092314',
+    title: 'data11092314',
     total: '1'
   },
 ];

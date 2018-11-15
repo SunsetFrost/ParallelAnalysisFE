@@ -25,23 +25,23 @@ const headerContent = (detail) => (
         <Description term="Model">{detail.modelCfg.models[0]}</Description>
         <Description term="Creator">{detail.user}</Description>
         <Description term="Start">{moment(detail.time.start).format('YYYY-MM-DD H:m')}</Description>
-        <Description term="During">{moment(detail.time.end).format('YYYY-MM-DD H:m')}</Description>
-        <Description term="Data">DataA</Description>
-        <Description term="Parallel mode">Standalone</Description>
-        <Description term="Completed Task">{detail.numTasks.completed}</Description>
-        <Description term="Failed Task">{detail.numTasks.failed}</Description>
+        <Description term="End">{moment(detail.time.end).format('YYYY-MM-DD H:m')}</Description>
+        <Description term="Data">GlobleStandardDataSet</Description>
+        <Description term="Parallel mode">{detail.parallCfg.mode}</Description>
+        <Description term="Total Task">{detail.numTasks.total}</Description>
+        <Description term="Completed Task">{detail.numTasks.completed}</Description>        
     </DescriptionList>
 );
 
-const extra = (status, taskNum) => (
+const extra = (status, taskNum, time) => (
     <Row>
       <Col xs={24} sm={12}>
         <div className={styles.textSecondary}>Status</div>
         <div className={styles.heading}>{status}</div>
       </Col>
       <Col xs={24} sm={12}>
-        <div className={styles.textSecondary}>Tasks</div>
-        <div className={styles.heading}>{taskNum}</div>
+        <div className={styles.textSecondary}>Time</div>
+        <div className={styles.heading}>{`${(moment(time.end).diff(moment(time.start), 'minutes'))}min`}</div>
       </Col>
     </Row>
 );
@@ -50,18 +50,18 @@ const server = (server) => {
     return (
     <DescriptionList size="small" style={{ marginBottom: 16 }} title={server.name}>
         <Description term="Total Task">{server.task.total}</Description>
-        <Description term="Complete Task">{server.task.complete}</Description>
+        <Description term="Complete Task">{server.task.completed}</Description>
         <Description term="Failed Task">{server.task.failed}</Description>
         <Description term="Host">{server.hostport}</Description>
         <Description term="CPU">{server.resource.cpu}</Description>
         <Description term="Memory">{server.resource.memory}</Description>
         <Progress
-          percent={Number(Math.round((server.task.complete / server.task.total) * 100))}
+          percent={Number(Math.round((server.task.completed / server.task.total) * 100))}
           strokeWidth={6}
           style={{ width: '90%', margin: '2px 10px' }}
         ></Progress>
     </DescriptionList>)
-}
+}     
 
 const getStatus = (status) => {
     if(status == 'FINISHED_SUCCEED') {
@@ -76,35 +76,35 @@ const advancedOperation1 = [
       host: '172.21.212.122',
       server: 'OGMS_ubuntu_slave1',
       status: 'success',
-      time: '2017-10-03  19:23:12',
+      time: '2018-11-15  19:23',
     },
     {
         id: '2',
         host: '172.21.212.122',
         server: 'OGMS_ubuntu_slave1',
         status: 'success',
-        time: '2017-10-03  19:23:12',
+        time: '2018-11-15  19:23',
     },
     {
         id: '3',
-        host: '172.21.212.122',
-        server: 'OGMS_ubuntu_slave1',
+        host: '172.21.213.177',
+        server: 'OGMS_ubuntu_slave2',
         status: 'success',
-        time: '2017-10-03  19:23:12',
+        time: '2018-11-15  19:24',
     },
     {
         id: '4',
-        host: '172.21.212.122',
-        server: 'OGMS_ubuntu_slave1',
+        host: '172.21.212.246',
+        server: 'OGMS_ubuntu_slave3',
         status: 'success',
-        time: '2017-10-03  19:23:12',
+        time: '2018-11-15  19:24',
     },
     {
         id: '5',
-        host: '172.21.212.122',
-        server: 'OGMS_ubuntu_slave1',
+        host: '172.21.213.177',
+        server: 'OGMS_ubuntu_slave2',
         status: 'success',
-        time: '2017-10-03  19:23:12',
+        time: '2018-11-15  19:25',
     },
   ];
 
@@ -147,19 +147,19 @@ const advancedOperation1 = [
     loading: loading.effects['instance/fetchInstanceById'],
 }))
 export default class InstanceDetail extends PureComponent {
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'instance/setDetail',
+        })
+    }
+
     onBack = () => {
         router.push('/cluster/instance');
     };
 
     render() {
-        const { instance: { detail, list }, loading } = this.props;
-        const newDetail = list.filter(item => {
-            if(item._id === detail.id) {
-                return true;
-            } else {
-                return false;
-            }
-        })[0]
+        const { instance: { detail }, loading } = this.props;
 
         const action = (
             <Fragment>
@@ -173,21 +173,21 @@ export default class InstanceDetail extends PureComponent {
 
         return (
             <PageHeaderWrapper
-              title={newDetail.name}
+              title={detail.name}
               logo={
                 <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
               }
-              content={headerContent(newDetail)}
+              content={headerContent(detail)}
               action={action}
-              extraContent={extra(getStatus(newDetail.status), newDetail.numTasks.total)}
+              extraContent={extra(getStatus(detail.status), detail.numTasks.total, detail.time)}
               hiddenBreadcrumb={true}
             >
               <Card title="Server" style={{ marginBottom: 24 }}>
-                {server(newDetail.server[0])}
+                {server(detail.server[0])}
                 <Divider style={{ margin: '28px 0' }} />
-                {server(newDetail.server[1])}
+                {server(detail.server[1])}
                 <Divider style={{ margin: '28px 0' }} />
-                {server(newDetail.server[2])}
+                {server(detail.server[2])}
               </Card>
               <Card title="Task">
                 <Table

@@ -86,14 +86,14 @@ export default class Step1 extends React.PureComponent {
           </Form.Item>
           <Form.Item {...formItemLayout} label="DataSet">
             {getFieldDecorator('dataset')(
-                <Select defaultValue="Default" placeholder="not necessary">
+                <Select defaultValue="Default" placeholder="choose dataset">
                     <Option value="default">default</Option>
                 </Select>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="ParamsSet">
             {getFieldDecorator('paramsset')(
-                <Select defaultValue="Default" placeholder="not necessary">
+                <Select defaultValue="Default" placeholder="choose params set">
                     <Option value="default">default</Option>
                 </Select>
             )}

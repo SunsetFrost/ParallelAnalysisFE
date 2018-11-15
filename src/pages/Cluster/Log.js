@@ -75,10 +75,10 @@ export default class Log extends PureComponent {
           <span>Type</span>
           <p>{log.type}</p>
         </div>
-        <div className={styles.listContentItem}>
+        {/* <div className={styles.listContentItem}>
           <span>Target</span>
           <p>{'Instance110654'}</p>
-        </div>
+        </div> */}
         <div className={styles.listContentItem}>
           <span>Action</span>
           <p>{log.action}</p>
@@ -165,13 +165,13 @@ export default class Log extends PureComponent {
                   <List.Item.Meta
                     avatar={
                       <Avatar
-                        src={'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png'}
+                        src={'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png'}
                         shape="square"
                         size="large"
                       />
                     }
-                    title={ item._id }
-                    description='testtesttesttesttesttesttesttesttesttest'
+                    title={ moment(item.time).format('YYYY-MM-DD hh-mm-ss') }
+                    description='No detail information'
                   />
                   <ListContent log={ item } />
                 </List.Item>
