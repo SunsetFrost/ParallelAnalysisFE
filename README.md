@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 English | [简体中文](./README.zh-CN.md) | [Русский](./README.ru-RU.md)
 
 <h1 align="center">Ant Design Pro</h1>
@@ -122,3 +123,7 @@ Any type of contribution is welcome, here are some examples of how you may contr
 - Use Ant Design Pro in your daily work.
 - Submit [issues](http://github.com/ant-design/ant-design-pro/issues) to report bugs or ask questions.
 - Propose [pull requests](http://github.com/ant-design/ant-design-pro/pulls) to improve our code.
+=======
+# ParallelAnalysisFE
+Parallel calculate carbon global model by using Mesos and Spark. Front end is base on react, dva, ant-design-pro project.
+>>>>>>> cb0a147e2ac70a638808c662030abfe7dce6007a
