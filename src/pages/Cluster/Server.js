@@ -1,21 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import {
-  List,
-  Card,
-  Row,
-  Col,
-  Radio,
-  Input,
-  Progress,
-  Button,
-  Icon,
-  Dropdown,
-  Menu,
-  Avatar,
-  Badge,
-} from 'antd';
+import { List, Card, Row, Col, Radio, Input, Avatar, Badge } from 'antd';
 
 import styles from './Server.less';
 
@@ -27,7 +13,7 @@ const { Search } = Input;
   server,
   loading: loading.effects['server/fetchServers'],
 }))
-export default class Server extends PureComponent {
+class Server extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -36,14 +22,15 @@ export default class Server extends PureComponent {
   }
 
   radioOnChange = e => {
-    const value = e.target.value;
+    const { value } = e.target;
+    const { dispatch } = this.props;
 
     if (value === 'all') {
-      this.props.dispatch({
+      dispatch({
         type: 'server/fetchServers',
       });
     } else {
-      this.props.dispatch({
+      dispatch({
         type: 'server/fetchServerByType',
         payload: value,
       });
@@ -56,8 +43,8 @@ export default class Server extends PureComponent {
       loading,
     } = this.props;
 
-    //console.log(list);
-    //const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
+    // console.log(list);
+    // const list = mesos.agents.length !== 0 ? mesos.agents.get_agents.agents : [];
 
     const Info = ({ title, value, bordered }) => (
       <div className={styles.headerInfo}>
@@ -117,7 +104,7 @@ export default class Server extends PureComponent {
               <Info title="Master" value="1 Server" bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="Agent" value={'4 Server'} />
+              <Info title="Agent" value="4 Server" />
             </Col>
           </Row>
         </Card>
@@ -140,7 +127,7 @@ export default class Server extends PureComponent {
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png'}
+                      src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png"
                       shape="square"
                       size="large"
                     />
@@ -157,3 +144,5 @@ export default class Server extends PureComponent {
     );
   }
 }
+
+export default Server;

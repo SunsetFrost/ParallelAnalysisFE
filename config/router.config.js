@@ -22,18 +22,18 @@ export default [
       {
         path: '/home',
         icon: 'home',
-        name: 'Home',
+        name: '监控',
         component: './Home/Home',
       },
       //cluster
       {
         path: '/cluster',
         icon: 'cluster',
-        name: 'Cluster',
+        name: '集群',
         routes: [
           {
             path: '/cluster/server',
-            name: 'Server',
+            name: '网络',
             component: './Cluster/Server',
           },
           {
@@ -78,15 +78,15 @@ export default [
                 name: 'Result',
                 component: '/Cluster/CreateInstance/Step3',
               },
-            ]
-          }
+            ],
+          },
         ],
       },
       //data
       {
         path: '/data',
         icon: 'hdd',
-        name: 'Data',
+        name: '数据',
         routes: [
           {
             path: '/data/list',
@@ -104,7 +104,7 @@ export default [
       {
         path: '/tool',
         icon: 'tool',
-        name: 'Tool',
+        name: '工具',
         routes: [
           {
             path: '/tool/data-process',

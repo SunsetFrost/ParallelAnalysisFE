@@ -9,8 +9,7 @@ export default {
 
   effects: {
     *fetchServers(_, { call, put }) {
-      const response = yield call(queryServer);
-      const data = response.data;
+      const { data } = yield call(queryServer);
       yield put({
         type: 'getServers',
         payload: data,
@@ -24,7 +23,7 @@ export default {
         payload: {
           serverType: payload,
           list,
-        }
+        },
       });
     },
   },
@@ -37,16 +36,16 @@ export default {
       };
     },
     getServerByType(state, { payload }) {
-      let newServerList = payload.list.filter(server => {
-        if(server.type == payload.serverType) {
+      const newServerList = payload.list.filter(server => {
+        if (server.type === payload.serverType) {
           return true;
         }
-      })
+        return false;
+      });
       return {
         ...state,
         list: newServerList,
-      }
-
+      };
     },
   },
 };

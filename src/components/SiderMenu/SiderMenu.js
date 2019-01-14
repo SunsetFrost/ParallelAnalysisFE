@@ -110,7 +110,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} id="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>Model Parallel</h1>
+            <h1>模型并行系统</h1>
           </Link>
         </div>
         <BaseMenu
