@@ -24,5 +24,32 @@ export default {
         list: payload,
       };
     },
+    updateDetail(state, { payload }) {
+      const [detail] = state.list.filter(item => {
+        let isNet = false;
+        if(item._id === payload) {
+          isNet = true;
+        } 
+        return isNet;
+      })
+
+      return {
+        ...state,
+        detail
+      }
+    }
   },
+
+  subscriptions: {
+    setup({ dispatch, history }) {
+      history.listen((location) => {
+        if(location.pathname === '/cluster/net-detail') {
+          dispatch({
+            type: 'updateDetail',
+            payload: location.query.id,
+          })
+        }
+      })
+    }
+  }
 };

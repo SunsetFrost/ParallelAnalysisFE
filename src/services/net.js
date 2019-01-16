@@ -8,9 +8,12 @@ export async function queryNet() {
   });
 }
 
-export async function testNet() {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net`;
+export async function addNet(net) {
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/add`;
   return request(url, {
-    method: 'GET',
+    method: 'POST',
+    body: {
+      data: net,
+    },
   });
 }

@@ -22,7 +22,18 @@
       height: 48px;
       line-height: 48px;
     }
+    .ant-list-item-content {
+      font-size: @font-size-base;
+      color: @text-color-secondary;
+    }
+    .ant-badge-status-text {
+      color: @text-color-secondary;
+    }
+    .ant-card-extra {
+      flex: 1 1;
+    }
   }
+
   .headerInfo {
     position: relative;
     text-align: center;
@@ -49,31 +60,32 @@
     }
   }
   .listContent {
-    font-size: 0;
-    .listContentItem {
+    width: 100%;
+    div {
       color: @text-color-secondary;
       display: inline-block;
       vertical-align: middle;
       font-size: @font-size-base;
-      margin-left: 40px;
       min-width: 50px;
       > span {
-        line-height: 20px;
+        line-height: 22px;
       }
       > p {
         margin-top: 4px;
         margin-bottom: 0;
-        line-height: 22px;
+        line-height: 20px;
+        > a {
+          margin-right: 6px;
+        }
       }
     }
     .listContentItem:last-child {
       margin-right: 12px;
     }
   }
-  .extraContentSearch {
-    margin-left: 16px;
-    width: 272px;
-  }
+  // .extraContentSearch {
+  //   width: 272px;
+  // }
 }
 
 @media screen and (max-width: @screen-xs) {

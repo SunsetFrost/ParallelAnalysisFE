@@ -1,96 +1,142 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import {
-  Card,
-  Row,
-  Col,
-  Radio,
-  Input,
-  Avatar,
-  Badge,
-  Collapse,
-} from 'antd';
-import moment from 'moment';
+import { Badge, Button, Card, Row, Col, Radio, Input, Avatar, List } from 'antd';
+import Link from 'umi/link';
+// import moment from 'moment';
 
 import styles from './Net.less';
 
-const Panel = Collapse.Panel;
-const customPanelStyle = {
-    background: '#f7f7f7',
-    borderRadius: 4,
-    marginBottom: 24,
-    border: 0,
-    overflow: 'hidden',
-};
+const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
+const { Search } = Input;
 
 @connect(({ net, loading }) => ({
-    net,
-    loading: loading.effects['net/fetchNets'],
+  net,
+  loading: loading.effects['net/fetchNets'],
 }))
 class Net extends PureComponent {
-    componentDidMount() {
-        const { dispatch } = this.props;
-        dispatch({
-            type: 'net/fetchNets',
-        });
-    }
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/fetchNets',
+    });
+  }
+
+  render() {
+    const {
+      net: { list },
+      loading,
+    } = this.props;
 
     const Info = ({ title, value, bordered }) => (
-        <div className={styles.headerInfo}>
-          <span>{title}</span>
-          <p>{value}</p>
-          {bordered && <em />}
-        </div>
-      );
-  
-    const extraContent = (
-        <div className={styles.extraContent}>
-          <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
-            <RadioButton value="all">All</RadioButton>
-            <RadioButton value="election">Election</RadioButton>
-            <RadioButton value="master">Master</RadioButton>
-            <RadioButton value="agent">Agent</RadioButton>
-          </RadioGroup>
-          <Search
-            className={styles.extraContentSearch}
-            placeholder="Server name or Ip"
-            onSearch={() => ({})}
-          />
-        </div>
+      <div className={styles.headerInfo}>
+        <span>{title}</span>
+        <p>{value}</p>
+        {bordered && <em />}
+      </div>
     );
 
-    render() {
-        const {
-            net: { list },
-            loading,
-        } = this.props;
+    const extraContent = (
+      <Row gutter={16}>
+        <Col span={4}>
+          <Button type="primary">创建网络</Button>
+        </Col>
+        <Col span={12}>
+          <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
+            <RadioButton value="all">全部</RadioButton>
+            <RadioButton value="public">公有云</RadioButton>
+            <RadioButton value="private">私有云</RadioButton>
+          </RadioGroup>        
+        </Col>
+        <Col span={8}>
+          <Search
+            className={styles.extraContentSearch}
+            placeholder="集群名或IP"
+            onSearch={() => ({})}
+          />        
+        </Col>
+      </Row>
+    );
 
-        return (
-            <div>
-              <Card bordered={false}>
-                <Row>
-                    <Col sm={8} xs={24}>
-                    <Info title="公有云" value="1 Server" bordered />
-                    </Col>
-                    <Col sm={8} xs={24}>
-                    <Info title="私有云" value="1 Server" bordered />
-                    </Col>
-                    <Col sm={8} xs={24}>
-                    <Info title="混合云" value='4 Server' />
-                    </Col>
-                </Row>
-              </Card>
-              <Card>
-                <Collapse>
-                <Panel>
-                    <p>test</p>
-                </Panel>
-                </Collapse>
-              </Card>
-            </div>
+    // const CollapseContent = ({ data: { ip }}) => (
+    //   <p>{ip}</p>
+    // )
 
-        )
-    }
+    const ListContent = ({ data:{ _id, ip, type } }) => (
+      <Row gutter={2} className={styles.listContent}>
+        <Col span={6}>
+          <span>地址</span>
+          <p>{ip}</p>
+        </Col>
+        <Col span={6}>
+          <span>网络类型</span>
+          <p>{type}</p>
+        </Col>
+        <Col span={6}>
+          <span>状态</span>
+          <p>
+            <Badge status="success" text='可用' />
+          </p>
+        </Col>
+        <Col>
+          <span>操作</span>
+          <p>
+            <Link to={`/cluster/net-detail?id=${_id}`}>查看</Link>
+            <a>加入</a>
+          </p>
+        </Col>
+      </Row>
+    );
+
+    return (
+      <div className={styles.standardList}>
+        <Card bordered={false}>
+          <Row>
+            <Col sm={8} xs={24}>
+              <Info title="计算机" value="6台物理计算机" bordered />
+            </Col>
+            <Col sm={8} xs={24}>
+              <Info title="公网集群" value="3个网络集群" bordered />
+            </Col>
+            <Col sm={8} xs={24}>
+              <Info title="内网集群" value="2个网络集群" />
+            </Col>
+          </Row>
+        </Card>
+        <Card
+          className={styles.listCard}
+          bordered={false}
+          title="网络集群"
+          style={{ marginTop: 24 }}
+          bodyStyle={{ padding: '0 32px 40px 32px' }}
+          extra={extraContent}
+        >
+          <List
+            size="large"
+            rowKey="id"
+            loading={loading}
+            dataSource={list}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src="https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png"
+                      shape="square"
+                      size="large"
+                    />
+                  }
+                  title={<a href={item.ip}>{item.name}</a>}
+                  description='南京师范大学虚拟地理实验室服务器-陈旻'
+                />
+                <ListContent data={item} />                
+              </List.Item>
+            )}
+          />
+        </Card>
+      </div>
+    );
+  }
 }
 
 export default Net;

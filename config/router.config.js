@@ -17,7 +17,7 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      //home
+      // home
       { path: '/', redirect: '/home' },
       {
         path: '/home',
@@ -25,15 +25,36 @@ export default [
         name: '监控',
         component: './Home/Home',
       },
-      //cluster
+      // cluster
       {
         path: '/cluster',
         icon: 'cluster',
         name: '集群',
         routes: [
           {
-            path: '/cluster/server',
+            path: '/cluster/net',
             name: '网络',
+            component: './Cluster/Net',
+          },
+          {
+            path: '/cluster/net-detail',
+            name: 'NetDetail',
+            component: './Cluster/NetDetail',
+            hideInMenu: true,
+          },
+          {
+            path: '/cluster/data',
+            name: '数据',
+            component: './Cluster/Data',
+          },
+          {
+            path: '/cluster/calc',
+            name: '计算',
+            component: './Cluster/Calc',
+          },
+          {
+            path: '/cluster/server',
+            name: 'Server',
             component: './Cluster/Server',
           },
           {
@@ -82,7 +103,12 @@ export default [
           },
         ],
       },
-      //data
+      {
+        path: '/parallel',
+        icon: 'radar-chart',
+        name: '并行',
+      },
+      // data
       {
         path: '/data',
         icon: 'hdd',
@@ -100,28 +126,16 @@ export default [
           },
         ],
       },
+      {
+        path: '/log',
+        icon: 'calendar',
+        name: '日志',
+      },
       // tool
       {
         path: '/tool',
         icon: 'tool',
-        name: '工具',
-        routes: [
-          {
-            path: '/tool/data-process',
-            name: 'DataProcess',
-            component: './Tool/DataProcess',
-          },
-          {
-            path: '/tool/data-analysis',
-            name: 'DataAnalysis',
-            component: './Tool/DataAnalysis',
-          },
-          {
-            path: '/tool/jupyter',
-            name: 'Jupyter',
-            component: './Tool/Jupyter',
-          },
-        ],
+        name: '分析',
       },
       {
         component: '404',
