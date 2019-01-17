@@ -1,18 +1,19 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Card, Steps } from 'antd';
-import styles from './style-index.less';
+import styles from './index.less';
 
 const { Step } = Steps;
 
-class CreateInstance extends PureComponent {
+class CreateNet extends PureComponent {
   getCurrentStep() {
-    const { location } = this.props;
-    const { pathname } = location;
+    const {
+      location: { pathname },
+    } = this.props;
     const pathList = pathname.split('/');
     switch (pathList[pathList.length - 1]) {
-      case 'model-cfg':
+      case 'net-cfg':
         return 0;
-      case 'parall-cfg':
+      case 'switch-cfg':
         return 1;
       case 'result':
         return 2;
@@ -27,9 +28,9 @@ class CreateInstance extends PureComponent {
       <Card bordered={false}>
         <Fragment>
           <Steps current={this.getCurrentStep()} className={styles.steps}>
-            <Step title="Instance Config" />
-            <Step title="Parallel Config" />
-            <Step title="Complete" />
+            <Step title="专有网络配置" />
+            <Step title="服务器配置" />
+            <Step title="完成" />
           </Steps>
           {children}
         </Fragment>
@@ -38,4 +39,4 @@ class CreateInstance extends PureComponent {
   }
 }
 
-export default CreateInstance;
+export default CreateNet;

@@ -1,4 +1,4 @@
-import { queryCalc } from '@/services/calc';
+import { queryCalc, addCalc } from '@/services/calc';
 
 export default {
   namespace: 'calc',

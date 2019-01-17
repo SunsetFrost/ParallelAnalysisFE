@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Badge, Button, Card, Row, Col, Radio, Input, Avatar, List } from 'antd';
 import Link from 'umi/link';
+import router from 'umi/router';
 // import moment from 'moment';
 
 import styles from './Net.less';
@@ -12,15 +13,41 @@ const { Search } = Input;
 
 @connect(({ net, loading }) => ({
   net,
-  loading: loading.effects['net/fetchNets'],
+  loading: loading.effects['net/fetch'],
 }))
 class Net extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'net/fetchNets',
+      type: 'net/fetch',
     });
   }
+
+  onCreateClick = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/saveCreate',
+      payload: {
+        type: 'create',
+      },
+    });
+    router.push({
+      pathname: '/cluster/net-create',
+    });
+  };
+
+  onJoinClick = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/saveCreate',
+      payload: {
+        type: 'join',
+      },
+    });
+    router.push({
+      pathname: '/cluster/net-create',
+    });
+  };
 
   render() {
     const {
@@ -39,21 +66,23 @@ class Net extends PureComponent {
     const extraContent = (
       <Row gutter={16}>
         <Col span={4}>
-          <Button type="primary">创建网络</Button>
+          <Button type="primary" onClick={this.onCreateClick}>
+            创建网络
+          </Button>
         </Col>
         <Col span={12}>
           <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
             <RadioButton value="all">全部</RadioButton>
             <RadioButton value="public">公有云</RadioButton>
             <RadioButton value="private">私有云</RadioButton>
-          </RadioGroup>        
+          </RadioGroup>
         </Col>
         <Col span={8}>
           <Search
             className={styles.extraContentSearch}
             placeholder="集群名或IP"
             onSearch={() => ({})}
-          />        
+          />
         </Col>
       </Row>
     );
@@ -62,7 +91,7 @@ class Net extends PureComponent {
     //   <p>{ip}</p>
     // )
 
-    const ListContent = ({ data:{ _id, ip, type } }) => (
+    const ListContent = ({ data: { _id, ip, type } }) => (
       <Row gutter={2} className={styles.listContent}>
         <Col span={6}>
           <span>地址</span>
@@ -75,14 +104,14 @@ class Net extends PureComponent {
         <Col span={6}>
           <span>状态</span>
           <p>
-            <Badge status="success" text='可用' />
+            <Badge status="success" text="可用" />
           </p>
         </Col>
         <Col>
           <span>操作</span>
           <p>
             <Link to={`/cluster/net-detail?id=${_id}`}>查看</Link>
-            <a>加入</a>
+            <a onClick={this.onJoinClick}>加入</a>
           </p>
         </Col>
       </Row>
@@ -127,9 +156,9 @@ class Net extends PureComponent {
                     />
                   }
                   title={<a href={item.ip}>{item.name}</a>}
-                  description='南京师范大学虚拟地理实验室服务器-陈旻'
+                  description="南京师范大学虚拟地理实验室服务器-陈旻"
                 />
-                <ListContent data={item} />                
+                <ListContent data={item} />
               </List.Item>
             )}
           />

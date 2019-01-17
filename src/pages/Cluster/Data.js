@@ -39,14 +39,14 @@ class Data extends PureComponent {
     const extraContent = (
       <Row gutter={16}>
         <Col span={4}>
-          <Button type="primary">创建数据集群</Button>
+          <Button type="primary">创建</Button>
         </Col>
         <Col span={12}>
           <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
             <RadioButton value="all">全部</RadioButton>
-            <RadioButton value="public">公网集群</RadioButton>
-            <RadioButton value="private">内网集群</RadioButton>
-            <RadioButton value="mix">混合集群</RadioButton>
+            <RadioButton value="public">公网</RadioButton>
+            <RadioButton value="private">内网</RadioButton>
+            <RadioButton value="mix">混合</RadioButton>
           </RadioGroup>
         </Col>
         <Col span={8}>

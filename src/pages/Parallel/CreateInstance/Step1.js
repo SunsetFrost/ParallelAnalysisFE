@@ -22,7 +22,7 @@ const formItemLayout = {
   data: creInstance,
 }))
 @Form.create()
-export default class Step1 extends React.PureComponent {
+class Step1 extends React.PureComponent {
   render() {
     const { form, dispatch, data } = this.props;
     const { getFieldDecorator, validateFields } = form;
@@ -45,57 +45,51 @@ export default class Step1 extends React.PureComponent {
             {getFieldDecorator('name', {
               initialValue: data.name,
               rules: [{ required: true, message: 'please input instance name' }],
-            })(
-                <Input  placeholder="input instance name" />
-            )}
+            })(<Input placeholder="input instance name" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="Model">
             {getFieldDecorator('model', {
               initialValue: data.model,
               rules: [{ required: true, message: 'please select model' }],
             })(
-                <Select defaultValue="ibis">
-                    <Option value="ibis">IBIS</Option>
-                    <Option value="biome">Biome-BGC</Option>
-                    <Option value="lpj">LPJ</Option>
-                </Select>
+              <Select defaultValue="ibis">
+                <Option value="ibis">IBIS</Option>
+                <Option value="biome">Biome-BGC</Option>
+                <Option value="lpj">LPJ</Option>
+              </Select>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="Time">
             {getFieldDecorator('time', {
-              initialValue: [moment(data.time[0], 'YYYY/MM/DD'), moment(data.time[1], 'YYYY/MM/DD')],
+              initialValue: [
+                moment(data.time[0], 'YYYY/MM/DD'),
+                moment(data.time[1], 'YYYY/MM/DD'),
+              ],
               rules: [{ required: true, message: 'please select time range' }],
-            })(
-                <RangePicker placeholder={['start date', 'end date']} style={{ width: '100%' }} />
-            )}
+            })(<RangePicker placeholder={['start date', 'end date']} style={{ width: '100%' }} />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="Site">
             <InputGroup>
-                {getFieldDecorator('siteStart', {
-                    initialValue: data.siteStart,
-                })(
-                            <Input style={{ width: '50%' }} placeholder="input start site" />
-                )} 
-                {getFieldDecorator('siteEnd', {
-                    initialValue: data.siteEnd,
-                })(
-                            <Input style={{ width: '50%' }} placeholder="input end site" />
-                )}            
+              {getFieldDecorator('siteStart', {
+                initialValue: data.siteStart,
+              })(<Input style={{ width: '50%' }} placeholder="input start site" />)}
+              {getFieldDecorator('siteEnd', {
+                initialValue: data.siteEnd,
+              })(<Input style={{ width: '50%' }} placeholder="input end site" />)}
             </InputGroup>
-
           </Form.Item>
           <Form.Item {...formItemLayout} label="DataSet">
             {getFieldDecorator('dataset')(
-                <Select defaultValue="Default" placeholder="choose dataset">
-                    <Option value="default">default</Option>
-                </Select>
+              <Select defaultValue="Default" placeholder="choose dataset">
+                <Option value="default">default</Option>
+              </Select>
             )}
           </Form.Item>
           <Form.Item {...formItemLayout} label="ParamsSet">
             {getFieldDecorator('paramsset')(
-                <Select defaultValue="Default" placeholder="choose params set">
-                    <Option value="default">default</Option>
-                </Select>
+              <Select defaultValue="Default" placeholder="choose params set">
+                <Option value="default">default</Option>
+              </Select>
             )}
           </Form.Item>
           <Form.Item
@@ -118,14 +112,18 @@ export default class Step1 extends React.PureComponent {
           <h3>Instruction</h3>
           <h4>Choose Model</h4>
           <p>
-            This is the detail explain of create function, This is the detail explain of create function, This is the detail explain of create function.
+            This is the detail explain of create function, This is the detail explain of create
+            function, This is the detail explain of create function.
           </p>
           <h4>Choose calculate range</h4>
           <p>
-          This is the detail explain of create function, This is the detail explain of create function, This is the detail explain of create function.
+            This is the detail explain of create function, This is the detail explain of create
+            function, This is the detail explain of create function.
           </p>
         </div>
       </Fragment>
     );
   }
 }
+
+export default Step1;
