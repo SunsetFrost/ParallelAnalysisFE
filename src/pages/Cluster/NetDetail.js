@@ -4,18 +4,59 @@ import { Button, Badge, Card, Row, Col, Table } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import ButtonGroup from 'antd/lib/button/button-group';
+import router from 'umi/router';
 
 import moment from 'moment';
 import styles from './NetDetail.less';
 
 const { Description } = DescriptionList;
 
+const statusMapUI = ['warning', 'success', 'processing', 'warning', 'error'];
+const statusMapText = ['未认证', '可用', '部署中', '断开', '不可用'];
+
 @connect(({ net, loading }) => ({
   net,
-  loading: loading.effects['net/fetchNetById'],
+  loading: loading.effects['net/fetchById'],
 }))
 class NetDetail extends PureComponent {
-  componentDidMount() {}
+  componentDidMount() {
+    const {
+      dispatch,
+      net: {
+        detail: { _id },
+      },
+    } = this.props;
+    dispatch({
+      type: 'net/fetchById',
+      payload: _id,
+    });
+  }
+
+  onReturnClick() {
+    router.push({
+      pathname: '/cluster/net',
+    });
+  }
+
+  onJoinClick = () => {
+    const {
+      dispatch,
+      net: { detail },
+    } = this.props;
+    dispatch({
+      type: 'net/saveCreate',
+      payload: {
+        type: 'join',
+        value: detail,
+      },
+    });
+    router.push({
+      pathname: '/cluster/net-create/net-cfg',
+      query: {
+        id: detail._id,
+      },
+    });
+  };
 
   render() {
     const {
@@ -30,21 +71,23 @@ class NetDetail extends PureComponent {
       <DescriptionList className={styles.headerList} size="middle" col="2">
         <Description term="ID">{item._id}</Description>
         <Description term="名称">{item.name}</Description>
-        <Description term="网段">10.36.0.0/16</Description>
-        <Description term="创建时间">2019-01-03</Description>
-        <Description term="描述">
-          <a>编辑</a>
+        <Description term="网段">{item.ip}</Description>
+        <Description term="创建时间">
+          {moment(Number(item.create_time)).format('YYYY-MM-DD HH:mm')}
         </Description>
+        <Description term="描述">{item.desc ? item.desc : <a>编辑</a>}</Description>
       </DescriptionList>
     );
 
     const action = (
       <Fragment>
-        <Button type="primary">加入</Button>
+        <Button type="primary" onClick={this.onJoinClick}>
+          加入
+        </Button>
         <ButtonGroup>
           <Button>查看计算集群</Button>
           <Button>查看数据集群</Button>
-          <Button>返回</Button>
+          <Button onClick={this.onReturnClick}>返回</Button>
         </ButtonGroup>
       </Fragment>
     );
@@ -53,11 +96,11 @@ class NetDetail extends PureComponent {
       <Row>
         <Col xs={24} sm={12}>
           <div className={styles.textSecondary}>状态</div>
-          <div className={styles.heading}>{status}</div>
+          <div className={styles.heading}>{statusMapText[status]}</div>
         </Col>
-        <Col xs={24} sm={12}>
+        <Col xs={24} sm={10}>
           <div className={styles.textSecondary}>计算机</div>
-          <div className={styles.heading}>{pcNum}</div>
+          <div className={styles.heading}>{`${pcNum}台`}</div>
         </Col>
       </Row>
     );
@@ -85,16 +128,27 @@ class NetDetail extends PureComponent {
         title: '处理器',
         dataIndex: 'cpu',
         key: 'cpu',
+        render: val => `${val}GHz`,
       },
       {
         title: '内存',
         dataIndex: 'mem',
         key: 'mem',
+        render: val => `${val}G`,
       },
       {
         title: '加入时间',
         dataIndex: 'join_time',
         key: 'join_time',
+        render: val => <span>{moment(Number(val)).format('YYYY-MM-DD HH:mm')}</span>,
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render(val) {
+          return <Badge status={statusMapUI[val]} text={statusMapText[val]} />;
+        },
       },
       // {
       //   title: 'Status',
@@ -117,7 +171,7 @@ class NetDetail extends PureComponent {
         }
         content={headerContent(detail)}
         action={action}
-        extraContent={extra('可用', '12台')}
+        extraContent={extra(detail.status, detail.pcs.length)}
         hiddenBreadcrumb
       >
         <Card title="PC" style={{ marginBottom: 24 }}>

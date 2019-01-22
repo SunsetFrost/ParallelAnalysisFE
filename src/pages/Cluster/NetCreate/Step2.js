@@ -32,18 +32,31 @@ class NetStep2 extends React.PureComponent {
       e.preventDefault();
       validateFields((err, values) => {
         if (!err) {
-          dispatch({
-            type: 'net/add',
-            payload: {
-              ...create.form,
-              pcs: [
-                {
+          if (create.type === 'create') {
+            const newCreate = Object.assign(
+              {
+                pcs: {
                   ...values,
-                  join_time: Date.now(),
                 },
-              ],
-            },
-          });
+              },
+              create.value
+            );
+
+            dispatch({
+              type: 'net/addNet',
+              payload: newCreate,
+            });
+          } else if (create.type === 'join') {
+            dispatch({
+              type: 'net/addPC',
+              payload: {
+                id: create.value.net._id,
+                pc: {
+                  ...values,
+                },
+              },
+            });
+          }
         }
       });
     };

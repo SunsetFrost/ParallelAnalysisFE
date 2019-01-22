@@ -15,12 +15,17 @@ const formItemLayout = {
 };
 
 @connect(({ net }) => ({
-  create: net.create,
+  net,
 }))
 @Form.create()
 class NetStep1 extends React.PureComponent {
   render() {
-    const { form, dispatch, create } = this.props;
+    const {
+      form,
+      dispatch,
+      net: { create },
+    } = this.props;
+    const value = create.value;
     const { getFieldDecorator, validateFields } = form;
 
     const onValidateForm = () => {
@@ -30,10 +35,10 @@ class NetStep1 extends React.PureComponent {
             dispatch({
               type: 'net/saveCreate',
               payload: {
-                ...create,
-                form: values,
+                value: values,
               },
             });
+          } else if (create.type === 'join') {
           }
 
           router.push('/cluster/net-create/switch-cfg');
@@ -46,7 +51,7 @@ class NetStep1 extends React.PureComponent {
         <Form layout="horizontal" className={styles.stepForm} hideRequiredMark>
           <Form.Item {...formItemLayout} label="网络名称">
             {getFieldDecorator('name', {
-              initialValue: 'test',
+              initialValue: create.type == 'join' ? value.name : 'testNet',
               // rules: [{ required: true, message: 'please input instance name' }],
             })(
               <Input disabled={create.type == 'join' ? true : false} placeholder="请输入网络名称" />
@@ -54,7 +59,7 @@ class NetStep1 extends React.PureComponent {
           </Form.Item>
           <Form.Item {...formItemLayout} label="网络类型">
             {getFieldDecorator('type', {
-              initialValue: 'public',
+              initialValue: create.type == 'join' ? value.type : 'public',
               // rules: [{ required: true, message: 'please select' }],
             })(
               <Select disabled={create.type == 'join' ? true : false} defaultValue="public">
@@ -65,13 +70,14 @@ class NetStep1 extends React.PureComponent {
           </Form.Item>
           <Form.Item {...formItemLayout} label="专有网段">
             {getFieldDecorator('ip', {
-              initialValue: '10.36.0.0',
+              initialValue: create.type == 'join' ? value.ip : '10.36.0.0/12',
               // rules: [{ required: true, message: 'please input desc' }],
             })(<Input disabled={create.type == 'join' ? true : false} placeholder="请输入网段" />)}
           </Form.Item>
           <Form.Item {...formItemLayout} label="描述">
             {getFieldDecorator('desc', {
-              initialValue: '南京师范大学虚拟地理实验室服务器-陈旻',
+              initialValue:
+                create.type == 'join' ? value.desc : '南京师范大学虚拟地理实验室服务器-陈旻',
               // rules: [{ required: true, message: 'please input desc' }],
             })(
               <Input disabled={create.type == 'join' ? true : false} placeholder="请输入网络描述" />

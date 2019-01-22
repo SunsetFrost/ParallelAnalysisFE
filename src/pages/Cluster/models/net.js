@@ -1,5 +1,6 @@
-import { queryNet, addNet } from '@/services/net';
-import router from 'umi/router';
+import { queryNetByParam, queryNetById, addNet, updateNet, addPC, updatePC } from '@/services/net';
+// import router from 'umi/router';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'net',
@@ -7,25 +8,47 @@ export default {
   state: {
     list: [],
     detail: {},
+    create: {},
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const { data } = yield call(queryNet);
+    *fetchByParam({ payload }, { call, put }) {
+      const { data } = yield call(queryNetByParam, payload);
       yield put({
         type: 'saveList',
         payload: data,
       });
     },
-    *add({ payload }, { call, put }) {
+    *fetchById({ payload }, { call, put }) {
+      const { data } = yield call(queryNetById, payload);
+      yield put({
+        type: 'saveDetail',
+        payload: data,
+      });
+    },
+    *addNet({ payload }, { call, put }) {
       const { data } = yield call(addNet, payload);
       yield put({
         type: 'saveCreate',
         payload: {
-          form: data,
+          value: data,
         },
       });
-      yield put(router.push('/cluster/net-create/result'));
+      yield put(routerRedux.push('/cluster/net-create/result'));
+    },
+    *update({ data }, { call, put }) {
+      const { isSuccess } = yield call(updateNet, payload);
+      yield put(routerRedux.push('/cluster/net-create/result'));
+    },
+    *addPC({ payload }, { call, put }) {
+      const { data } = yield call(addPC, payload);
+      yield put({
+        type: 'saveCreate',
+        payload: {
+          value: data,
+        },
+      });
+      yield put(routerRedux.push('/cluster/net-create/result'));
     },
   },
 
@@ -66,6 +89,7 @@ export default {
       return {
         ...state,
         create: {
+          ...state.create,
           ...payload,
         },
       };
@@ -74,23 +98,6 @@ export default {
       return {
         ...state,
         create: {},
-      };
-    },
-    saveFormType(state, { payload }) {
-      return {
-        ...state,
-        form_type: payload,
-      };
-    },
-    saveDetailOfForm(state, { payload }) {
-      if (payload.form_type === 'net-config') {
-        return {
-          ...state,
-          detail: payload.form,
-        };
-      }
-      return {
-        ...state,
       };
     },
   },
@@ -103,6 +110,15 @@ export default {
             type: 'saveDetailById',
             payload: location.query.id,
           });
+        } else if (location.pathname === '/cluster/net-create/net-cfg' && location.query.id) {
+          // dispatch({
+          //   type: 'saveCreate',
+          //   payload: {
+          //     value: {
+          //       id: location.query.id,
+          //     },
+          //   },
+          // });
         }
       });
     },

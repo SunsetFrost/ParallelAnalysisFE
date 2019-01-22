@@ -38,14 +38,14 @@ export default {
     },
   },
 
-  subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen(location => {
-        dispatch({
-          type: 'detail',
-          payload: location.query.id,
-        });
-      });
-    },
-  },
+  // subscriptions: {
+  //   setup({ dispatch, history }) {
+  //     history.listen(location => {
+  //       dispatch({
+  //         type: 'detail',
+  //         payload: location.query.id,
+  //       });
+  //     });
+  //   },
+  // },
 };

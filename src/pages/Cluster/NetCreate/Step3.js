@@ -1,16 +1,19 @@
 import React, { Fragment, PureComponent } from 'react';
-import { connect } from 'dva';
 import { Button, Row, Col } from 'antd';
+import { connect } from 'dva';
 import router from 'umi/router';
 import Result from '@/components/Result';
 import styles from './style.less';
 
 @connect(({ net }) => ({
-  data: net.create.form,
+  create: net.create,
 }))
 class NetStep3 extends PureComponent {
   render() {
-    const { data, dispatch } = this.props;
+    const {
+      create: { value, type: create_type },
+      dispatch,
+    } = this.props;
 
     const onFinish = () => {
       dispatch({
@@ -26,14 +29,14 @@ class NetStep3 extends PureComponent {
       router.push('/cluster/net');
     };
 
-    const information = (
+    const information_net = (
       <div className={styles.information}>
         <Row>
           <Col xs={24} sm={8} className={styles.label}>
             您的秘钥:
           </Col>
           <Col xs={24} sm={16}>
-            {data._id}
+            {value._id}
           </Col>
         </Row>
         <Row>
@@ -41,7 +44,7 @@ class NetStep3 extends PureComponent {
             网络名称:
           </Col>
           <Col xs={24} sm={16}>
-            {data.name}
+            {value.name}
           </Col>
         </Row>
         <Row>
@@ -49,7 +52,7 @@ class NetStep3 extends PureComponent {
             网络类型:
           </Col>
           <Col xs={24} sm={16}>
-            {data.type}
+            {value.type}
           </Col>
         </Row>
         <Row>
@@ -57,9 +60,54 @@ class NetStep3 extends PureComponent {
             网段范围:
           </Col>
           <Col xs={24} sm={16}>
-            {data.ip}
+            {value.ip}
           </Col>
         </Row>
+      </div>
+    );
+
+    const information_pc = (
+      <div className={styles.information}>
+        <Row>
+          <Col xs={24} sm={8} className={styles.label}>
+            您的秘钥:
+          </Col>
+          <Col xs={24} sm={16}>
+            {value._id}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={8} className={styles.label}>
+            主机名称:
+          </Col>
+          <Col xs={24} sm={16}>
+            {value.hostname}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={8} className={styles.label}>
+            处理器:
+          </Col>
+          <Col xs={24} sm={16}>
+            {value.cpu}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={24} sm={8} className={styles.label}>
+            内存:
+          </Col>
+          <Col xs={24} sm={16}>
+            {value.mem}
+          </Col>
+        </Row>
+        {/* <Row>
+          <Col xs={24} sm={8} className={styles.label}>
+            所属网络:
+          </Col>
+          <Col xs={24} sm={16}>
+            {value._id}
+          </Col>
+        </Row> */}
       </div>
     );
 
@@ -75,9 +123,13 @@ class NetStep3 extends PureComponent {
     return (
       <Result
         type="success"
-        title="创建成功"
-        description="当前网络属于未认证状态，请您凭秘钥在您的本地一键安装并行服务器，服务器将自动认证"
-        extra={information}
+        title={create_type === 'join' ? '加入成功' : '创建成功'}
+        description={
+          create_type === 'join'
+            ? '当前主机属于未认证状态，请您凭秘钥在您的本地一键安装并行服务器，服务器将自动认证'
+            : '当前网络属于未认证状态，请您凭秘钥在您的本地一键安装并行服务器，服务器将自动认证'
+        }
+        extra={create_type === 'create' ? information_net : information_pc}
         actions={actions}
         className={styles.result}
       />

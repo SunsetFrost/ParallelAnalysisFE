@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Badge, Button, Card, Row, Col, Radio, Input, Avatar, List } from 'antd';
+import { Badge, Button, Card, Divider, Row, Col, Radio, Input, Avatar, List } from 'antd';
 import Link from 'umi/link';
 import router from 'umi/router';
-// import moment from 'moment';
+import _ from 'lodash';
 
 import styles from './Net.less';
 
@@ -11,15 +11,18 @@ const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
 const { Search } = Input;
 
+const statusMapUI = ['warning', 'success', 'processing', 'warning', 'error'];
+const statusMapText = ['未认证', '可用', '部署中', '断开', '不可用'];
+
 @connect(({ net, loading }) => ({
   net,
-  loading: loading.effects['net/fetch'],
+  loading: loading.effects['net/fetchByParam'],
 }))
 class Net extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'net/fetch',
+      type: 'net/fetchByParam',
     });
   }
 
@@ -32,20 +35,50 @@ class Net extends PureComponent {
       },
     });
     router.push({
-      pathname: '/cluster/net-create',
+      pathname: '/cluster/net-create/net-cfg',
     });
   };
 
-  onJoinClick = () => {
-    const { dispatch } = this.props;
+  onJoinClick = id => {
+    const {
+      dispatch,
+      net: { list },
+    } = this.props;
     dispatch({
       type: 'net/saveCreate',
       payload: {
         type: 'join',
+        // value: {
+        //   net: list.filter(item => (item._id === id ? true : false))[0],
+        // },
       },
     });
     router.push({
-      pathname: '/cluster/net-create',
+      pathname: '/cluster/net-create/net-cfg',
+      query: {
+        id,
+      },
+    });
+  };
+
+  onRadioChange = e => {
+    const type = e.target.value === 'all' ? {} : e.target.value;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/fetchByParam',
+      payload: {
+        type,
+      },
+    });
+  };
+
+  onSearch = value => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/fetchByParam',
+      payload: {
+        name: value,
+      },
     });
   };
 
@@ -64,34 +97,50 @@ class Net extends PureComponent {
     );
 
     const extraContent = (
-      <Row gutter={16}>
-        <Col span={4}>
+      <Row type="flex" justify="end" gutter={16}>
+        <Col>
           <Button type="primary" onClick={this.onCreateClick}>
             创建网络
           </Button>
         </Col>
-        <Col span={12}>
-          <RadioGroup defaultValue="all" onChange={this.radioOnChange}>
+        <Col>
+          <RadioGroup defaultValue="all" onChange={this.onRadioChange}>
             <RadioButton value="all">全部</RadioButton>
             <RadioButton value="public">公有云</RadioButton>
             <RadioButton value="private">私有云</RadioButton>
           </RadioGroup>
         </Col>
-        <Col span={8}>
+        <Col>
           <Search
             className={styles.extraContentSearch}
-            placeholder="集群名或IP"
-            onSearch={() => ({})}
+            placeholder="网络名"
+            onSearch={this.onSearch}
           />
         </Col>
       </Row>
     );
 
-    // const CollapseContent = ({ data: { ip }}) => (
-    //   <p>{ip}</p>
-    // )
+    const ListCount = (type, list) => {
+      const countObj = _.countBy(list, item => {
+        return item.type;
+      });
 
-    const ListContent = ({ data: { _id, ip, type } }) => (
+      if (type === 'public') {
+        return countObj.public ? countObj.public : 0;
+      } else if (type === 'private') {
+        return countObj.private ? countObj.private : 0;
+      } else if (type === 'pc') {
+        return _.reduce(
+          list,
+          (sum, item) => {
+            return sum + item.pcs.length;
+          },
+          0
+        );
+      }
+    };
+
+    const ListContent = ({ data: { _id, ip, type, status } }) => (
       <Row gutter={2} className={styles.listContent}>
         <Col span={6}>
           <span>地址</span>
@@ -99,19 +148,21 @@ class Net extends PureComponent {
         </Col>
         <Col span={6}>
           <span>网络类型</span>
-          <p>{type}</p>
+          <p>{type === 'public' ? '公网' : '内网'}</p>
         </Col>
         <Col span={6}>
           <span>状态</span>
           <p>
-            <Badge status="success" text="可用" />
+            <Badge status={statusMapUI[status]} text={statusMapText[status]} />
           </p>
         </Col>
         <Col>
           <span>操作</span>
           <p>
-            <Link to={`/cluster/net-detail?id=${_id}`}>查看</Link>
-            <a onClick={this.onJoinClick}>加入</a>
+            <Fragment>
+              <Link to={`/cluster/net-detail?id=${_id}`}>查看</Link>
+              <a onClick={() => this.onJoinClick(_id)}>加入</a>
+            </Fragment>
           </p>
         </Col>
       </Row>
@@ -122,13 +173,13 @@ class Net extends PureComponent {
         <Card bordered={false}>
           <Row>
             <Col sm={8} xs={24}>
-              <Info title="计算机" value="6台物理计算机" bordered />
+              <Info title="公网集群" value={`${ListCount('public', list)}个网络集群`} bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="公网集群" value="3个网络集群" bordered />
+              <Info title="内网集群" value={`${ListCount('private', list)}个网络集群`} bordered />
             </Col>
             <Col sm={8} xs={24}>
-              <Info title="内网集群" value="2个网络集群" />
+              <Info title="计算机" value={`${ListCount('pc', list)}台物理计算机`} />
             </Col>
           </Row>
         </Card>
@@ -146,7 +197,7 @@ class Net extends PureComponent {
             loading={loading}
             dataSource={list}
             renderItem={item => (
-              <List.Item>
+              <List.Item key={item._id}>
                 <List.Item.Meta
                   avatar={
                     <Avatar
@@ -156,7 +207,7 @@ class Net extends PureComponent {
                     />
                   }
                   title={<a href={item.ip}>{item.name}</a>}
-                  description="南京师范大学虚拟地理实验室服务器-陈旻"
+                  description={item.desc}
                 />
                 <ListContent data={item} />
               </List.Item>
