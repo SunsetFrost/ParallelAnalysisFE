@@ -19,6 +19,13 @@ const formItemLayout = {
 }))
 @Form.create()
 class NetStep1 extends React.PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'net/fetchByParam',
+    });
+  }
+
   render() {
     const {
       form,

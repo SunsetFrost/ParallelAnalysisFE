@@ -8,6 +8,15 @@ export default {
   state: {
     list: [],
     detail: {},
+    /*
+      create: {
+        type: {
+          value
+          ?id
+        }
+        value
+      }
+    */
     create: {},
   },
 
