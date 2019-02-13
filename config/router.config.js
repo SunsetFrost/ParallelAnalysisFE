@@ -55,18 +55,15 @@ export default [
               },
               {
                 path: '/cluster/net-create/net-cfg',
-                name: 'NetConfig',
-                component: '/Cluster/NetCreate/Step1',
+                component: './Cluster/NetCreate/NetStep1',
               },
               {
                 path: '/cluster/net-create/switch-cfg',
-                name: 'SwitchConfig',
-                component: '/Cluster/NetCreate/Step2',
+                component: './Cluster/NetCreate/NetStep2',
               },
               {
                 path: '/cluster/net-create/result',
-                name: 'Result',
-                component: '/Cluster/NetCreate/Step3',
+                component: './Cluster/NetCreate/NetStep3',
               },
             ],
           },
@@ -123,17 +120,17 @@ export default [
               {
                 path: '/parallel/create/model-cfg',
                 name: 'ModelConfig',
-                component: '/Parallel/CreateInstance/Step1',
+                component: './Parallel/CreateInstance/Step1',
               },
               {
                 path: '/parallel/create/parall-cfg',
                 name: 'ParallConfig',
-                component: '/Parallel/CreateInstance/Step2',
+                component: './Parallel/CreateInstance/Step2',
               },
               {
                 path: '/parallel/create/result',
                 name: 'Result',
-                component: '/Parallel/CreateInstance/Step3',
+                component: './Parallel/CreateInstance/Step3',
               },
             ],
           },

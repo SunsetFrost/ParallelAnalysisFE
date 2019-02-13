@@ -120,14 +120,14 @@ export default {
             payload: location.query.id,
           });
         } else if (location.pathname === '/cluster/net-create/net-cfg' && location.query.id) {
-          // dispatch({
-          //   type: 'saveCreate',
-          //   payload: {
-          //     value: {
-          //       id: location.query.id,
-          //     },
-          //   },
-          // });
+          dispatch({
+            type: 'saveCreate',
+            payload: {
+              value: {
+                id: location.query.id,
+              },
+            },
+          });
         }
       });
     },

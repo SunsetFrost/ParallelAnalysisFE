@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Card, Steps } from 'antd';
+
 import styles from './index.less';
 
 const { Step } = Steps;

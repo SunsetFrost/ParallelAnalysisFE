@@ -18,7 +18,7 @@ export async function queryNetById(id) {
 }
 
 export async function addNet(net) {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/add`;
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net`;
   return request(url, {
     method: 'POST',
     body: {
@@ -28,9 +28,9 @@ export async function addNet(net) {
 }
 
 export async function updateNet(net) {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/update`;
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net`;
   return request(url, {
-    method: 'POST',
+    method: 'PUT',
     body: {
       data: net,
     },
@@ -38,7 +38,7 @@ export async function updateNet(net) {
 }
 
 export async function addPC(params) {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/pc/add`;
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/pc`;
   return request(url, {
     method: 'POST',
     body: {
@@ -50,9 +50,9 @@ export async function addPC(params) {
 }
 
 export async function updatePC(id, pc) {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/pc/update`;
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/pc`;
   return request(url, {
-    method: 'POST',
+    method: 'PUT',
     body: {
       data: {
         id,
