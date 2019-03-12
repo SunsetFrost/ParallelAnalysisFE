@@ -38,7 +38,7 @@ export async function updateNet(net) {
 }
 
 export async function addPC(params) {
-  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/pc`;
+  const url = `http://${setting.backEndDB.ip}:${setting.backEndDB.port}/net/${params.id}/pc`;
   return request(url, {
     method: 'POST',
     body: {

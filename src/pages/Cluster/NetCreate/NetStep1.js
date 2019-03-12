@@ -21,8 +21,18 @@ const formItemLayout = {
 class NetStep1 extends React.PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
+    const id = this.props.net.create.value.id;
+    const currentNet = this.props.net.list.find(item => {
+      return item._id == id;
+    });
+    if (!currentNet) {
+      console.log('current creating net is undefined');
+    }
     dispatch({
-      type: 'net/fetchByParam',
+      type: 'net/saveCreate',
+      payload: {
+        value: currentNet,
+      },
     });
   }
 

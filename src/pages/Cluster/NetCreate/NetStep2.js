@@ -50,7 +50,7 @@ class NetStep2 extends React.PureComponent {
             dispatch({
               type: 'net/addPC',
               payload: {
-                id: create.value.net._id,
+                id: create.value._id,
                 pc: {
                   ...values,
                 },
